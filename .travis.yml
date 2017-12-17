@@ -56,3 +56,5 @@ deploy:
   on:
     branch: master
     tags: true
+    repo: wiaio/wia-android-sdk
+    condition: "$API = android-19"

@@ -17,13 +17,26 @@ import retrofit2.http.QueryMap;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public interface WiaService {
-  @GET("spaces")
-  Observable<WiaSpaceList> listSpaces();
+  @GET("users/{id}")
+  Observable<WiaUser> retrieveUser(
+    @Path("id") String id
+  );
 
   @GET("spaces/{id}")
   Observable<WiaSpace> retrieveSpace(
     @Path("id") String id
   );
+
+  @GET("spaces")
+  Observable<WiaSpaceList> listSpaces();
+
+  @GET("devices/{id}")
+  Observable<WiaDevice> retrieveDevice(
+    @Path("id") String id
+  );
+
+  @GET("devices")
+  Observable<WiaDeviceList> listDevices();
 
   // @GET("spaces/{space}")
   // Flowable<Response<CDASpace>> space(

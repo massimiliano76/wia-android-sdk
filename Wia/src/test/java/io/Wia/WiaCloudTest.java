@@ -108,6 +108,32 @@ public class WiaCloudTest {
   }
 
   @Test
+  public void testRetrieveCurrentUser() throws Exception {
+    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+
+    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+      .clientKey(WIA_CLIENT_KEY)
+      .server(WIA_SERVER_URL)
+      .build()
+    );
+
+    Wia.accessToken(WIA_ACCESS_TOKEN);
+
+    final Semaphore done = new Semaphore(0);
+
+    Observable<WiaUser> result = Wia.retrieveUser("me");
+    result.subscribeOn(Schedulers.io())
+          .subscribe(user -> {
+            System.out.println(user.toString());
+            done.release();
+          }, error -> {
+            System.out.println(error.toString());
+          });
+
+    assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+  }
+
+  @Test
   public void testListSpace() throws Exception {
     Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 

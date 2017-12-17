@@ -305,11 +305,23 @@ public class Wia {
     return WiaPlugins.get().accessToken();
   }
 
-  public static Observable<WiaSpaceList> listSpaces() {
-    return WiaPlugins.get().wiaService().listSpaces();
+  public static Observable<WiaUser> retrieveUser(String id) {
+    return WiaPlugins.get().wiaService().retrieveUser(id);
   }
 
   public static Observable<WiaSpace> retrieveSpace(String id) {
     return WiaPlugins.get().wiaService().retrieveSpace(id);
+  }
+
+  public static Observable<WiaSpaceList> listSpaces() {
+    return WiaPlugins.get().wiaService().listSpaces();
+  }
+
+  public static Observable<WiaDevice> retrieveDevice(String id) {
+    return WiaPlugins.get().wiaService().retrieveDevice(id);
+  }
+
+  public static Observable<WiaDeviceList> listDevices() {
+    return WiaPlugins.get().wiaService().listDevices();
   }
 }

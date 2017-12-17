@@ -25,13 +25,6 @@ public class WiaSpace extends WiaResource {
     return name;
   }
 
-  // /**
-  //  * @return a list of locales of this space.
-  //  */
-  // public List<CDALocale> locales() {
-  //   return locales;
-  // }
-
   /**
    * Create a String from this object.
    * @return a String containing the id and name of this space

@@ -1,4 +1,4 @@
-Contentful Java
+Wia Android SDK
 ===============
 
 [![Build Status](https://travis-ci.org/wiaio/wia-android-sdk.svg)](https://travis-ci.org/wiaio/wia-android-sdk/builds#)

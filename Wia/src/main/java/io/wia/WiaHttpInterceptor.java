@@ -6,6 +6,8 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.io.IOException;
 
 class WiaHttpInterceptor implements Interceptor {
@@ -13,20 +15,20 @@ class WiaHttpInterceptor implements Interceptor {
     Request request = chain.request();
     Request newRequest;
 
-    long t1 = System.nanoTime();
-    System.err.println((String.format("Sending request %s on %s%n%s",
-        request.url(), chain.connection(), request.headers())));
+    Map<String, String> headersMap = new HashMap<String, String>();
+    if (WiaPlugins.get().accessToken() != null) {
+      headersMap.put("Authorization", String.format("Bearer %s", WiaPlugins.get().accessToken()));
+    }
 
-    System.err.println(WiaPlugins.get().accessToken());
-    System.err.println(WiaPlugins.get().clientKey());
+    if (WiaPlugins.get().clientKey() != null) {
+      headersMap.put("x-client-key", WiaPlugins.get().clientKey());
+    }
+
+    Headers headers = Headers.of(headersMap);
 
     newRequest = request.newBuilder()
-            .addHeader("Authorization", String.format("Bearer %s", WiaPlugins.get().accessToken()))
-            .addHeader("x-client-key", WiaPlugins.get().clientKey())
+            .headers(headers)
             .build();
-
-    System.err.println((String.format("Sending request %s on %s%n%s",
-        newRequest.url(), chain.connection(), newRequest.headers())));
 
     return chain.proceed(newRequest);
 

@@ -18,12 +18,12 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public interface WiaService {
   @GET("spaces")
-  Observable<WiaSpacesResponse> listSpaces();
+  Observable<WiaSpaceList> listSpaces();
 
-  // @GET("spaces/{id}")
-  // Observable<WiaSpace> retrieveSpace(
-  //   @Query("id") String id
-  // );
+  @GET("spaces/{id}")
+  Observable<WiaSpace> retrieveSpace(
+    @Path("id") String id
+  );
 
   // @GET("spaces/{space}")
   // Flowable<Response<CDASpace>> space(

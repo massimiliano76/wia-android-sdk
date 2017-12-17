@@ -2,12 +2,6 @@ package io.wia;
 
 import java.util.List;
 
-import retrofit2.Call;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-
 /**
  * Represents a space.
  */
@@ -48,12 +42,4 @@ public class WiaSpace extends WiaResource {
         + ", name='" + name + '\''
         + '}';
   }
-
-  public static Observable<WiaSpacesResponse> list() {
-    return WiaPlugins.get().wiaService().listSpaces();
-  }
-
-  // public static Observable<WiaSpace> retrieve(String id) {
-  //   return WiaPlugins.get().wiaService().retrieveSpace(id);
-  // }
 }

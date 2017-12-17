@@ -62,8 +62,9 @@ public class WiaCloudTest {
 
   private final String serverUrl = "https://api.wia.io/v1";
   private final String clientKey = "ck_test";
-  private final String WIA_SERVER_URL = "io.wia.SERVER_URL";
-  private final String WIA_CLIENT_KEY = "io.wia.CLIENT_KEY";
+  private String WIA_SERVER_URL = "io.wia.SERVER_URL";
+  private String WIA_CLIENT_KEY = "io.wia.CLIENT_KEY";
+  private String WIA_ACCESS_TOKEN = null;
 
   /**
    * Countdown latch
@@ -75,10 +76,17 @@ public class WiaCloudTest {
 
   @Before
   public void setUp() throws Exception {
+    Wia.reset();
+
+    WIA_SERVER_URL = System.getenv("WIA_SERVER_URL") != null ? System.getenv("WIA_SERVER_URL") : "https://api.wia.io/v1";
+    WIA_CLIENT_KEY = System.getenv("WIA_CLIENT_KEY");
+    WIA_ACCESS_TOKEN = System.getenv("WIA_ACCESS_TOKEN");
   }
 
   @Test
   public void testBuilder() {
+    System.out.println("-----  RUNNING TEST BUILDER");
+
     Wia.Configuration.Builder builder = new Wia.Configuration.Builder(null);
     builder.clientKey("bar");
     builder.server("http://abcdef.com");
@@ -88,49 +96,69 @@ public class WiaCloudTest {
     assertEquals(configuration.clientKey, "bar");
   }
 
-  // @Test
-  // public void testInitializeBuilder() throws Exception {
-  //   // MockContext context = mock(MockContext.class);
-  //   Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
-  //
-  //   Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-  //     .clientKey("ck_abcdef")
-  //     .server("https://api.wia.io/v1")
-  //     .build()
-  //   );
-  // }
-
   @Test
-  public void testRetrieveSpace() throws Exception {
-    System.err.println("---- DOING testRetrieveSpace ------");
-
-    // MockContext context = mock(MockContext.class);
+  public void testInitializeBuilder() throws Exception {
     Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey("")
+      .clientKey("ck_abcdef")
       .server("https://api.wia.io/v1")
       .build()
     );
+  }
 
-    Wia.accessToken("");
+  @Test
+  public void testListSpace() throws Exception {
+    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
-    Observable<WiaSpacesResponse> spaces = WiaSpace.list();
-    spaces.subscribeOn(Schedulers.io())
+    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+      .clientKey(WIA_CLIENT_KEY)
+      .server(WIA_SERVER_URL)
+      .build()
+    );
+
+    Wia.accessToken(WIA_ACCESS_TOKEN);
+
+    final Semaphore done = new Semaphore(0);
+
+    Observable<WiaSpaceList> result = Wia.listSpaces();
+    result.subscribeOn(Schedulers.io())
           // NOTE: Add this for Android device testing
           // .observeOn(AndroidSchedulers.mainThread())
           .subscribe(spacesResponse -> {
-            System.err.println("IN RESPONSES CALLBACK");
-            System.err.println(spacesResponse.getSpaces());
-            System.err.println(spacesResponse.getCount());
+            System.out.println("Spaces count: " + spacesResponse.count());
+            done.release();
           }, error -> {
-            System.err.println("IN ERROR CALLBACK");
-            System.err.println(error.toString());
+            System.out.println(error.toString());
           });
 
+    assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+  }
 
-    lock.await(2500, TimeUnit.MILLISECONDS);
+  @Test
+  public void testRetrieveSpace() throws Exception {
+    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
-    TimeUnit.SECONDS.sleep(2); // sleep for 100 seconds
+    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+      .clientKey(WIA_CLIENT_KEY)
+      .server(WIA_SERVER_URL)
+      .build()
+    );
+
+    Wia.accessToken(WIA_ACCESS_TOKEN);
+
+    final Semaphore done = new Semaphore(0);
+
+    Observable<WiaSpace> result = Wia.retrieveSpace("spc_UQhscsFI");
+    result.subscribeOn(Schedulers.io())
+          .subscribe(space -> {
+            System.out.println("Space ID:" + space.id());
+            System.out.println("Space Name:" + space.name());
+            done.release();
+          }, error -> {
+            System.out.println(error.toString());
+          });
+
+    assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
   }
 }

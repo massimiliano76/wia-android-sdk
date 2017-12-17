@@ -26,6 +26,10 @@ import java.util.concurrent.Callable;
 
 import okhttp3.OkHttpClient;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+
 public class Wia {
   private static final String TAG = "io.wia.Wia";
 
@@ -289,11 +293,23 @@ public class Wia {
     throw new AssertionError();
   }
 
+  static void reset() {
+    WiaPlugins.reset();
+  }
+
   static void accessToken(String token) {
     WiaPlugins.get().accessToken(token);
   }
 
   static String accessToken() {
     return WiaPlugins.get().accessToken();
+  }
+
+  public static Observable<WiaSpaceList> listSpaces() {
+    return WiaPlugins.get().wiaService().listSpaces();
+  }
+
+  public static Observable<WiaSpace> retrieveSpace(String id) {
+    return WiaPlugins.get().wiaService().retrieveSpace(id);
   }
 }

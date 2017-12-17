@@ -90,7 +90,7 @@ class WiaPlugins {
     }
 
     final Object lock = new Object();
-    private final Wia.Configuration configuration;
+    private Wia.Configuration configuration;
 
     // TODO: Change to WiaService
     // WiaHttpClient restClient;
@@ -142,8 +142,6 @@ class WiaPlugins {
               .addConverterFactory(GsonConverterFactory.create(gson))
               .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
               .build();
-
-      System.err.println("CREATING RETROFIT SERVICE");
 
       return retrofit.create(WiaService.class);
     }

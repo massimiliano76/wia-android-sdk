@@ -2,23 +2,23 @@ package io.wia;
 
 import java.util.List;
 
-public class WiaSpacesResponse {
+public class WiaSpaceList {
     private List<WiaSpace> spaces;
     private Integer count;
 
-    public List<WiaSpace> getSpaces() {
+    public List<WiaSpace> spaces() {
         return spaces;
     }
 
-    public void setSpaces(List<WiaSpace> spaces) {
+    public void spaces(List<WiaSpace> spaces) {
         this.spaces = spaces;
     }
 
-    public Integer getCount() {
+    public Integer count() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void count(Integer count) {
         this.count = count;
     }
 }

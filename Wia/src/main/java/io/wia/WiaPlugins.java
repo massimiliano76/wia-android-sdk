@@ -15,10 +15,25 @@ import android.annotation.SuppressLint;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 
-import javax.net.ssl.*;
-import java.security.cert.*;
+import java.security.cert.CertificateException;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.util.Arrays;
+import java.util.Collection;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.HostnameVerifier;
+import java.security.cert.X509Certificate;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,6 +54,8 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
+import okio.Buffer;
 
 class WiaPlugins {
 
@@ -99,24 +116,58 @@ class WiaPlugins {
               .setLenient()
               .create();
 
-      ConnectionSpec spec = new
-        // ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT)
-        //             .build();
-        ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                    .tlsVersions(
-                      TlsVersion.TLS_1_2
-                    )
-                    .cipherSuites(
-                      CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-                    )
-                    .build();
+      // ConnectionSpec spec = new
+      //   // ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT)
+      //   //             .build();
+      //   ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+      //               // .tlsVersions(
+      //               //   TlsVersion.TLS_1_2
+      //               // )
+      //               // .cipherSuites(
+      //               //   CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+      //               // )
+      //               .build();
+
+      final TrustManager[] trustAllCerts = new TrustManager[] {
+          new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+            }
+
+            @Override
+            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+            }
+
+            @Override
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+              return new java.security.cert.X509Certificate[]{};
+            }
+          }
+      };
+
+      X509TrustManager trustManager;
+      SSLSocketFactory sslSocketFactory;
+      try {
+        final SSLContext sslContext = SSLContext.getInstance("SSL");
+        sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+        sslSocketFactory = sslContext.getSocketFactory();
+      } catch (GeneralSecurityException e) {
+        throw new RuntimeException(e);
+      }
 
       // TODO: addInterceptor
       OkHttpClient client = new OkHttpClient.Builder()
-              .certificatePinner(new CertificatePinner.Builder()
-                  .add("api.wia.io", "sha256/Y2sYr/MXtA3/cbE06pNmPZ8M3gHyb38L4Yw0ovYBWvQ=")
-                  .build())
-              .connectionSpecs(Collections.singletonList(spec))
+              .sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0])
+              .hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                  return true;
+                }
+              })
+              // .certificatePinner(new CertificatePinner.Builder()
+              //     .add("api.wia.io", "sha256/Y2sYr/MXtA3/cbE06pNmPZ8M3gHyb38L4Yw0ovYBWvQ=")
+              //     .build())
+              // .connectionSpecs(Collections.singletonList(spec))
               .addInterceptor(new WiaHttpInterceptor())
               .build();
 
@@ -219,4 +270,5 @@ class WiaPlugins {
                     ") API Level " + Build.VERSION.SDK_INT;
         }
     }
+
 }

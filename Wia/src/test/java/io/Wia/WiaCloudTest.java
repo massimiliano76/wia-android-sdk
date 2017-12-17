@@ -276,10 +276,10 @@ public class WiaCloudTest {
     signupUserObservable.subscribeOn(Schedulers.io())
           // NOTE: Add this for Android device testing
           // .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(user -> {
-            assertNotNull("Verify that user is NOT null", user);
-            assertNotNull("Verify that user.id() is NOT null", user.id());
-            assertNotNull("Verify that user.fullName() is NOT null", user.fullName());
+          .subscribe(createdUser -> {
+            assertNotNull("Verify that user is NOT null", createdUser);
+            assertNotNull("Verify that user.id() is NOT null", createdUser.id());
+            assertNotNull("Verify that user.fullName() is NOT null", createdUser.fullName());
 
             Observable<WiaAccessToken> loginUserObservable = Wia.loginUser(
               emailAddress, password
@@ -290,7 +290,21 @@ public class WiaCloudTest {
                   .subscribe(accessToken -> {
                     assertNotNull("Verify that accessToken is NOT null", accessToken);
                     assertNotNull("Verify that accessToken.token() is NOT null", accessToken.token());
-                    done.release();
+
+                    Wia.accessToken(accessToken.token());
+
+                    Observable<WiaUser> currentUserObservable = Wia.retrieveUser("me");
+                    currentUserObservable.subscribeOn(Schedulers.io())
+                          // NOTE: Add this for Android device testing
+                          // .observeOn(AndroidSchedulers.mainThread())
+                          .subscribe(retrievedUser -> {
+                            assertNotNull("Verify that retrievedUser is NOT null", retrievedUser);
+                            assertNotNull("Verify that retrievedUser.id() is NOT null", retrievedUser.id());
+                            assertEquals(retrievedUser.id(), createdUser.id());
+                            done.release();
+                          }, error -> {
+                            System.err.println(error.toString());
+                          });
                   }, error -> {
                     System.err.println(error.toString());
                   });

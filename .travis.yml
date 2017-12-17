@@ -12,12 +12,15 @@ jdk:
 android:
   components:
     - tools
-    - build-tools-26.0.1
+    - platform-tools
+    - build-tools-27.0.0
+    - doc-27
     - android-19
     - android-21
     - android-22
     - android-23
     - android-26
+    - android-27
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-19
     - sys-img-armeabi-v7a-android-21

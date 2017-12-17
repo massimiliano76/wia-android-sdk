@@ -88,17 +88,17 @@ public class WiaCloudTest {
     assertEquals(configuration.clientKey, "bar");
   }
 
-  @Test
-  public void testInitializeBuilder() throws Exception {
-    // MockContext context = mock(MockContext.class);
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
-
-    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey("ck_abcdef")
-      .server("https://api.wia.io/v1")
-      .build()
-    );
-  }
+  // @Test
+  // public void testInitializeBuilder() throws Exception {
+  //   // MockContext context = mock(MockContext.class);
+  //   Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+  //
+  //   Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+  //     .clientKey("ck_abcdef")
+  //     .server("https://api.wia.io/v1")
+  //     .build()
+  //   );
+  // }
 
   @Test
   public void testRetrieveSpace() throws Exception {
@@ -117,13 +117,12 @@ public class WiaCloudTest {
 
     Observable<WiaSpacesResponse> spaces = WiaSpace.list();
     spaces.subscribeOn(Schedulers.io())
+          // NOTE: Add this for Android device testing
           // .observeOn(AndroidSchedulers.mainThread())
           .subscribe(spacesResponse -> {
             System.err.println("IN RESPONSES CALLBACK");
             System.err.println(spacesResponse.getSpaces());
-
-            // Log.d("search", searchString);
-            // view.showSearchResult(searchResponse.items());
+            System.err.println(spacesResponse.getCount());
           }, error -> {
             System.err.println("IN ERROR CALLBACK");
             System.err.println(error.toString());

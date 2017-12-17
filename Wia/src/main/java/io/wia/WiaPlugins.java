@@ -11,10 +11,14 @@ package io.wia;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.annotation.SuppressLint;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+
+import javax.net.ssl.*;
+import java.security.cert.*;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,6 +31,7 @@ import okhttp3.Response;
 import okhttp3.ConnectionSpec;
 import okhttp3.CipherSuite;
 import okhttp3.TlsVersion;
+import okhttp3.CertificatePinner;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
@@ -85,36 +90,41 @@ class WiaPlugins {
         configuration.accessToken = token;
     }
 
+    String accessToken() {
+        return configuration.accessToken;
+    }
+
     WiaService wiaService() {
       Gson gson = new GsonBuilder()
               .setLenient()
               .create();
 
       ConnectionSpec spec = new
+        // ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT)
+        //             .build();
         ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                     .tlsVersions(
-                      TlsVersion.TLS_1_0,
-                      TlsVersion.TLS_1_1,
                       TlsVersion.TLS_1_2
                     )
                     .cipherSuites(
-                      CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-                      CipherSuite.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-                      CipherSuite.TLS_DHE_RSA_WITH_AES_128_CBC_SHA
+                      CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
                     )
-                    .supportsTlsExtensions(true)
                     .build();
 
       // TODO: addInterceptor
       OkHttpClient client = new OkHttpClient.Builder()
+              .certificatePinner(new CertificatePinner.Builder()
+                  .add("api.wia.io", "sha256/Y2sYr/MXtA3/cbE06pNmPZ8M3gHyb38L4Yw0ovYBWvQ=")
+                  .build())
               .connectionSpecs(Collections.singletonList(spec))
+              .addInterceptor(new WiaHttpInterceptor())
               .build();
 
       Retrofit retrofit = new Retrofit.Builder()
-              .baseUrl("https://api.wia.io/v1/")
+              .baseUrl(configuration.server)
+              .client(client)
               .addConverterFactory(GsonConverterFactory.create(gson))
               .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-              .client(client)
               .build();
 
       System.err.println("CREATING RETROFIT SERVICE");

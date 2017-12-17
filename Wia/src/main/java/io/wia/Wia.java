@@ -290,6 +290,10 @@ public class Wia {
   }
 
   static void accessToken(String token) {
-    // WiaPlugins.Android.
+    WiaPlugins.get().accessToken(token);
+  }
+
+  static String accessToken() {
+    return WiaPlugins.get().accessToken();
   }
 }

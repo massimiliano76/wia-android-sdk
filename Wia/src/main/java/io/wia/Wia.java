@@ -321,7 +321,25 @@ public class Wia {
     return WiaPlugins.get().wiaService().retrieveDevice(id);
   }
 
-  public static Observable<WiaDeviceList> listDevices() {
-    return WiaPlugins.get().wiaService().listDevices();
+  public static Observable<WiaDeviceList> listDevices(String spaceId) {
+    return WiaPlugins.get().wiaService().listDevices(spaceId);
   }
+
+
+  public static Observable<WiaAccessToken> loginUser(String username, String password) {
+    WiaLoginRequest loginRequest = new WiaLoginRequest(
+      username, password, "user", "password"
+    );
+
+    return WiaPlugins.get().wiaService().generateAccessToken(loginRequest);
+  }
+
+  public static Observable<WiaUser> createUser(String fullName, String emailAddress, String password) {
+    WiaSignupRequest signupRequest = new WiaSignupRequest(
+      fullName, emailAddress, password
+    );
+
+    return WiaPlugins.get().wiaService().createUser(signupRequest);
+  }
+
 }

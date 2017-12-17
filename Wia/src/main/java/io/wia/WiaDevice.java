@@ -11,6 +11,10 @@ public class WiaDevice extends WiaResource {
 
   String name;
 
+  List<WiaEvent> events;
+
+  WiaLocation location;
+
   /**
    * @return id of this device.
    */
@@ -23,6 +27,20 @@ public class WiaDevice extends WiaResource {
    */
   public String name() {
     return name;
+  }
+
+  /**
+   * @return location of this device.
+   */
+  public WiaLocation location() {
+    return location;
+  }
+
+  /**
+   * @return events of this device.
+   */
+  public List<WiaEvent> events() {
+    return events;
   }
 
   /**

@@ -116,58 +116,23 @@ class WiaPlugins {
               .setLenient()
               .create();
 
-      // ConnectionSpec spec = new
-      //   // ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT)
-      //   //             .build();
-      //   ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-      //               // .tlsVersions(
-      //               //   TlsVersion.TLS_1_2
-      //               // )
-      //               // .cipherSuites(
-      //               //   CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-      //               // )
-      //               .build();
+      ConnectionSpec spec = new
+        ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                    .tlsVersions(
+                      TlsVersion.TLS_1_2
+                    )
+                    .cipherSuites(
+                      CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+                      CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+                      CipherSuite.TLS_DHE_RSA_WITH_AES_128_CBC_SHA
+                    )
+                    .build();
 
-      final TrustManager[] trustAllCerts = new TrustManager[] {
-          new X509TrustManager() {
-            @Override
-            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            @Override
-            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-            }
-
-            @Override
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-              return new java.security.cert.X509Certificate[]{};
-            }
-          }
-      };
-
-      X509TrustManager trustManager;
-      SSLSocketFactory sslSocketFactory;
-      try {
-        final SSLContext sslContext = SSLContext.getInstance("SSL");
-        sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-        sslSocketFactory = sslContext.getSocketFactory();
-      } catch (GeneralSecurityException e) {
-        throw new RuntimeException(e);
-      }
-
-      // TODO: addInterceptor
       OkHttpClient client = new OkHttpClient.Builder()
-              .sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0])
-              .hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                  return true;
-                }
-              })
-              // .certificatePinner(new CertificatePinner.Builder()
-              //     .add("api.wia.io", "sha256/Y2sYr/MXtA3/cbE06pNmPZ8M3gHyb38L4Yw0ovYBWvQ=")
-              //     .build())
-              // .connectionSpecs(Collections.singletonList(spec))
+              .certificatePinner(new CertificatePinner.Builder()
+                  .add("api.wia.io", "sha256/Y2sYr/MXtA3/cbE06pNmPZ8M3gHyb38L4Yw0ovYBWvQ=")
+                  .build())
+              .connectionSpecs(Collections.singletonList(spec))
               .addInterceptor(new WiaHttpInterceptor())
               .build();
 

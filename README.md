@@ -15,7 +15,7 @@ Grab via Maven:
 <dependency>
   <groupId>io.wia</groupId>
   <artifactId>wia-android-sdk</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
 </dependency>
 ```
 or Gradle:

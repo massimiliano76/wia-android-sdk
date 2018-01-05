@@ -3,43 +3,34 @@ package io.wia;
 import java.util.List;
 
 /**
- * Represents a space.
+ * Represents a organisation.
  */
-public class WiaSpace extends WiaResource {
+public class WiaOrganisation extends WiaResource {
 
   String id;
 
   String name;
 
-  WiaSpaceOwner owner;
-
   /**
-   * @return id of this space.
+   * @return id of this organisation.
    */
   public String id() {
     return id;
   }
 
   /**
-   * @return name of this space.
+   * @return name of this organisation.
    */
   public String name() {
     return name;
   }
 
   /**
-   * @return owner of this space.
-   */
-  public WiaSpaceOwner owner() {
-    return owner;
-  }
-
-  /**
    * Create a String from this object.
-   * @return a String containing the id and name of this space
+   * @return a String containing the id and name of this organisation
    */
   @Override public String toString() {
-    return "WiaSpace{"
+    return "WiaOrganisation{"
         + "id='" + id() + '\''
         + ", name='" + name + '\''
         + '}';

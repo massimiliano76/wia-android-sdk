@@ -9,7 +9,13 @@ public class WiaUser extends WiaResource {
 
   String id;
 
+  String firstName;
+
+  String lastName;
+
   String fullName;
+
+  String emailAddress;
 
   /**
    * @return id of this user.
@@ -19,10 +25,31 @@ public class WiaUser extends WiaResource {
   }
 
   /**
+   * @return first name of this user.
+   */
+  public String firstName() {
+    return firstName;
+  }
+
+  /**
+   * @return last name of this user.
+   */
+  public String lastName() {
+    return lastName;
+  }
+
+  /**
    * @return full name of this user.
    */
   public String fullName() {
     return fullName;
+  }
+
+  /**
+   * @return email address of this user.
+   */
+  public String emailAddress() {
+    return emailAddress;
   }
 
   /**

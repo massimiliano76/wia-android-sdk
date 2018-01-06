@@ -67,7 +67,8 @@ public class WiaCloudTest {
   private String WIA_SERVER_URL = "io.wia.SERVER_URL";
   private String WIA_CLIENT_KEY = "io.wia.CLIENT_KEY";
   private String WIA_ACCESS_TOKEN = null;
-  private String TEST_SPACE_ID = "spc_UQhscsFI";
+  private String WIA_SPACE_ID = null;
+  private String WIA_DEVICE_ID = null;
 
   /**
    * Countdown latch
@@ -84,6 +85,8 @@ public class WiaCloudTest {
     WIA_SERVER_URL = System.getenv("WIA_SERVER_URL") != null ? System.getenv("WIA_SERVER_URL") : "https://api.wia.io/v1";
     WIA_CLIENT_KEY = System.getenv("WIA_CLIENT_KEY");
     WIA_ACCESS_TOKEN = System.getenv("WIA_ACCESS_TOKEN");
+    WIA_SPACE_ID = System.getenv("WIA_SPACE_ID");
+    WIA_DEVICE_ID = System.getenv("WIA_DEVICE_ID");
   }
 
   @Test
@@ -179,7 +182,7 @@ public class WiaCloudTest {
 
     final Semaphore done = new Semaphore(0);
 
-    Observable<WiaSpace> result = Wia.retrieveSpace(TEST_SPACE_ID);
+    Observable<WiaSpace> result = Wia.retrieveSpace(WIA_SPACE_ID);
     result.subscribeOn(Schedulers.io())
           .subscribe(space -> {
             assertNotNull("Verify that space is NOT null", space);
@@ -207,7 +210,7 @@ public class WiaCloudTest {
 
     final Semaphore done = new Semaphore(0);
 
-    Observable<WiaDeviceList> result = Wia.listDevices(TEST_SPACE_ID);
+    Observable<WiaDeviceList> result = Wia.listDevices(WIA_SPACE_ID);
     result.subscribeOn(Schedulers.io())
           // NOTE: Add this for Android device testing
           // .observeOn(AndroidSchedulers.mainThread())
@@ -329,7 +332,7 @@ public class WiaCloudTest {
 
     final Semaphore done = new Semaphore(0);
 
-    Observable<WiaDevice> result = Wia.retrieveDevice("dev_zlMnBsYj");
+    Observable<WiaDevice> result = Wia.retrieveDevice(WIA_DEVICE_ID);
     result.subscribeOn(Schedulers.io())
           .subscribe(device -> {
             assertNotNull("Verify that device is NOT null", device);
@@ -361,7 +364,7 @@ public class WiaCloudTest {
 
     final Semaphore done = new Semaphore(0);
 
-    Observable<WiaDevice> result = Wia.retrieveDevice("dev_YIre07Mp");
+    Observable<WiaDevice> result = Wia.retrieveDevice(WIA_DEVICE_ID);
     result.subscribeOn(Schedulers.io())
           .subscribe(device -> {
             assertNotNull("Verify that device is NOT null", device);

@@ -324,8 +324,7 @@ public class Wia {
   public static Observable<WiaDeviceList> listDevices(String spaceId) {
     return WiaPlugins.get().wiaService().listDevices(spaceId);
   }
-
-
+  
   public static Observable<WiaAccessToken> loginUser(String username, String password) {
     WiaLoginRequest loginRequest = new WiaLoginRequest(
       username, password, "user", "password"

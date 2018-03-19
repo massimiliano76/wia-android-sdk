@@ -24,6 +24,10 @@ class WiaHttpInterceptor implements Interceptor {
       headersMap.put("x-client-key", WiaPlugins.get().clientKey());
     }
 
+    if (WiaPlugins.get().appKey() != null) {
+      headersMap.put("x-app-key", WiaPlugins.get().appKey());
+    }
+
     Headers headers = Headers.of(headersMap);
 
     newRequest = request.newBuilder()

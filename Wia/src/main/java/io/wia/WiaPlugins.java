@@ -103,6 +103,10 @@ class WiaPlugins {
         return configuration.clientKey;
     }
 
+    String appKey() {
+        return configuration.appKey;
+    }
+
     void accessToken(String token) {
         configuration.accessToken = token;
     }

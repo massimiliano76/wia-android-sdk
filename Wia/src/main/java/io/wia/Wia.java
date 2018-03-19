@@ -43,6 +43,7 @@ public class Wia {
     public static final class Builder {
       private Context context;
       private String accessToken;
+      private String appKey;
       private String clientKey;
       private String server;
       private OkHttpClient.Builder clientBuilder;
@@ -90,6 +91,7 @@ public class Wia {
           if (metaData != null) {
             server(metaData.getString(WIA_SERVER_URL));
             clientKey = metaData.getString(WIA_CLIENT_KEY);
+            appKey = metaData.getString(WIA_APP_KEY);
           }
         }
       }
@@ -105,6 +107,20 @@ public class Wia {
        */
       public Builder clientKey(String clientKey) {
         this.clientKey = clientKey;
+        return this;
+      }
+
+      /**
+       * Set the application key to be used by Wia.
+       * <p>
+       * This method is only required if you intend to use a different {@code appKey} than
+       * is defined by {@code io.wia.APPLICATION_KEY} in your {@code AndroidManifest.xml}.
+       *
+       * @param appKey The application key to set.
+       * @return The same builder, for easy chaining.
+       */
+      public Builder appKey(String appKey) {
+        this.appKey = appKey;
         return this;
       }
 
@@ -156,6 +172,7 @@ public class Wia {
 
     final Context context;
     final String clientKey;
+    final String appKey;
     final String server;
     final OkHttpClient.Builder clientBuilder;
 
@@ -164,6 +181,7 @@ public class Wia {
     private Configuration(Builder builder) {
       this.context = builder.context;
       this.clientKey = builder.clientKey;
+      this.appKey = builder.appKey;
       this.server = builder.server;
       this.clientBuilder = builder.clientBuilder;
       this.accessToken = builder.accessToken;
@@ -288,6 +306,7 @@ public class Wia {
 
   private static final String WIA_SERVER_URL = "io.wia.SERVER_URL";
   private static final String WIA_CLIENT_KEY = "io.wia.CLIENT_KEY";
+  private static final String WIA_APP_KEY = "io.wia.APP_KEY";
 
   private Wia() {
     throw new AssertionError();

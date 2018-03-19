@@ -10,10 +10,6 @@ package io.wia;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-
-import android.test.mock.MockContext;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,38 +19,22 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import java.text.SimpleDateFormat;
 
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import io.reactivex.Observable;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import io.wia.TestHelper;
+import io.wia.WiaTestActivity;
 
 // For android.os.Looper
 @RunWith(RobolectricTestRunner.class)
@@ -67,6 +47,7 @@ public class WiaCloudTest {
   private String WIA_SERVER_URL = "io.wia.SERVER_URL";
   private String WIA_CLIENT_KEY = "io.wia.CLIENT_KEY";
   private String WIA_ACCESS_TOKEN = null;
+  private String WIA_APPLICATION_KEY = null;
   private String WIA_SPACE_ID = null;
   private String WIA_DEVICE_ID = null;
 
@@ -85,6 +66,7 @@ public class WiaCloudTest {
     WIA_SERVER_URL = System.getenv("WIA_SERVER_URL") != null ? System.getenv("WIA_SERVER_URL") : "https://api.wia.io/v1";
     WIA_CLIENT_KEY = System.getenv("WIA_CLIENT_KEY");
     WIA_ACCESS_TOKEN = System.getenv("WIA_ACCESS_TOKEN");
+    WIA_APPLICATION_KEY = System.getenv("WIA_APPLICATION_KEY");
     WIA_SPACE_ID = System.getenv("WIA_SPACE_ID");
     WIA_DEVICE_ID = System.getenv("WIA_DEVICE_ID");
   }
@@ -109,6 +91,17 @@ public class WiaCloudTest {
       .server("https://api.wia.io/v1")
       .build()
     );
+  }
+
+
+  @Test
+  public void testInitializeApplicationBuilder() throws Exception {
+      Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+
+      Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                .applicationKey(WIA_APPLICATION_KEY)
+                .build()
+        );
   }
 
   @Test

@@ -39,7 +39,7 @@ public interface WiaService {
 
   @GET("devices")
   Observable<WiaDeviceList> listDevices(
-    @Query("spaceId") String spaceId
+    @Query("space.id") String spaceId
   );
 
   @POST("auth/token")

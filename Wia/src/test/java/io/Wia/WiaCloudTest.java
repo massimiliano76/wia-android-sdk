@@ -42,12 +42,11 @@ import io.wia.WiaTestActivity;
 public class WiaCloudTest {
   private static final String TAG = "io.wia.WiaCloudTest";
 
-  private final String serverUrl = "https://api.wia.io/v1";
-  private final String clientKey = "ck_test";
+  private final String DEFAULT_SERVER_URL = "https://api.wia.io/v1";
   private String WIA_SERVER_URL = "io.wia.SERVER_URL";
-  private String WIA_CLIENT_KEY = "io.wia.CLIENT_KEY";
   private String WIA_ACCESS_TOKEN = null;
-  private String WIA_APPLICATION_KEY = null;
+  private String WIA_APP_KEY = null;
+  private String WIA_CLIENT_KEY = null;
   private String WIA_SPACE_ID = null;
   private String WIA_DEVICE_ID = null;
 
@@ -63,10 +62,10 @@ public class WiaCloudTest {
   public void setUp() throws Exception {
     Wia.reset();
 
-    WIA_SERVER_URL = System.getenv("WIA_SERVER_URL") != null ? System.getenv("WIA_SERVER_URL") : "https://api.wia.io/v1";
-    WIA_CLIENT_KEY = System.getenv("WIA_CLIENT_KEY");
+    WIA_SERVER_URL = System.getenv("WIA_SERVER_URL") != null ? System.getenv("WIA_SERVER_URL") : DEFAULT_SERVER_URL;
     WIA_ACCESS_TOKEN = System.getenv("WIA_ACCESS_TOKEN");
-    WIA_APPLICATION_KEY = System.getenv("WIA_APPLICATION_KEY");
+    WIA_APP_KEY = System.getenv("WIA_APP_KEY");
+    WIA_CLIENT_KEY = System.getenv("WIA_CLIENT_KEY");
     WIA_SPACE_ID = System.getenv("WIA_SPACE_ID");
     WIA_DEVICE_ID = System.getenv("WIA_DEVICE_ID");
   }
@@ -74,23 +73,12 @@ public class WiaCloudTest {
   @Test
   public void testBuilder() {
     Wia.Configuration.Builder builder = new Wia.Configuration.Builder(null);
-    builder.clientKey("bar");
+    builder.appKey("bar");
     builder.server("http://abcdef.com");
     Wia.Configuration configuration = builder.build();
 
     assertNull(configuration.context);
-    assertEquals(configuration.clientKey, "bar");
-  }
-
-  @Test
-  public void testInitializeBuilder() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
-
-    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey("ck_abcdef")
-      .server("https://api.wia.io/v1")
-      .build()
-    );
+    assertEquals(configuration.appKey, "bar");
   }
 
 
@@ -99,9 +87,9 @@ public class WiaCloudTest {
       Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
       Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .applicationKey(WIA_APPLICATION_KEY)
-                .build()
-        );
+        .appKey(WIA_APP_KEY)
+        .build()
+      );
   }
 
   @Test
@@ -109,7 +97,7 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey(WIA_CLIENT_KEY)
+      .appKey(WIA_APP_KEY)
       .server(WIA_SERVER_URL)
       .build()
     );
@@ -136,7 +124,7 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey(WIA_CLIENT_KEY)
+      .appKey(WIA_APP_KEY)
       .server(WIA_SERVER_URL)
       .build()
     );
@@ -166,7 +154,7 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey(WIA_CLIENT_KEY)
+      .appKey(WIA_APP_KEY)
       .server(WIA_SERVER_URL)
       .build()
     );
@@ -194,7 +182,7 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey(WIA_CLIENT_KEY)
+      .appKey(WIA_APP_KEY)
       .server(WIA_SERVER_URL)
       .build()
     );
@@ -316,7 +304,7 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey(WIA_CLIENT_KEY)
+      .appKey(WIA_APP_KEY)
       .server(WIA_SERVER_URL)
       .build()
     );
@@ -348,7 +336,7 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey(WIA_CLIENT_KEY)
+      .appKey(WIA_APP_KEY)
       .server(WIA_SERVER_URL)
       .build()
     );

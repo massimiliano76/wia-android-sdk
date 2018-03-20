@@ -239,6 +239,38 @@ public class WiaCloudTest {
     assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
   }
 
+    @Test
+    public void testCreateSpace() throws Exception {
+        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                .appKey(WIA_APP_KEY)
+                .server(WIA_SERVER_URL)
+                .build()
+        );
+    
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+        final String name = "Test Space " + String.valueOf(System.currentTimeMillis());
+
+        Observable<WiaSpace> result = Wia.createSpace(
+                name
+        );
+        result.subscribeOn(Schedulers.io())
+                // NOTE: Add this for Android device testing
+                // .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(user -> {
+                    assertNotNull("Verify that space is NOT null", user);
+                    assertNotNull("Verify that space.id() is NOT null", user.id());
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    }
+
   @Test
   public void testCreateAndLoginUser() throws Exception {
     Activity activity = Robolectric.setupActivity(WiaTestActivity.class);

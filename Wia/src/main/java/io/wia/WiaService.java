@@ -19,9 +19,21 @@ import retrofit2.http.QueryMap;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public interface WiaService {
+  // Users
+  @POST("users")
+  Observable<WiaUser> createUser(
+    @Body WiaSignupRequest signupRequest
+  );
+
   @GET("users/{id}")
   Observable<WiaUser> retrieveUser(
     @Path("id") String id
+  );
+
+  // Spaces
+  @POST("spaces")
+  Observable<WiaSpace> createSpace(
+    @Body WiaCreateSpaceRequest createSpaceRequest
   );
 
   @GET("spaces/{id}")
@@ -45,10 +57,5 @@ public interface WiaService {
   @POST("auth/token")
   Observable<WiaAccessToken> generateAccessToken(
     @Body WiaLoginRequest loginRequest
-  );
-
-  @POST("users")
-  Observable<WiaUser> createUser(
-    @Body WiaSignupRequest signupRequest
   );
 }

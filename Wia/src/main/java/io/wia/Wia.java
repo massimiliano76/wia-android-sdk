@@ -332,6 +332,14 @@ public class Wia {
     return WiaPlugins.get().wiaService().retrieveSpace(id);
   }
 
+  public static Observable<WiaSpace> createSpace(String name) {
+    WiaCreateSpaceRequest createSpaceRequest = new WiaCreateSpaceRequest(
+        name
+    );
+
+    return WiaPlugins.get().wiaService().createSpace(createSpaceRequest);
+  }
+
   public static Observable<WiaSpaceList> listSpaces() {
     return WiaPlugins.get().wiaService().listSpaces();
   }

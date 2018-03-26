@@ -33,9 +33,6 @@ import io.reactivex.Observable;
 import java.util.concurrent.CountDownLatch;
 import io.reactivex.schedulers.Schedulers;
 
-import io.wia.TestHelper;
-import io.wia.WiaTestActivity;
-
 // For android.os.Looper
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = TestHelper.ROBOLECTRIC_SDK_VERSION)
@@ -80,7 +77,6 @@ public class WiaCloudTest {
     assertNull(configuration.context);
     assertEquals(configuration.appKey, "bar");
   }
-
 
   @Test
   public void testInitializeApplicationBuilder() throws Exception {
@@ -179,7 +175,7 @@ public class WiaCloudTest {
 
   @Test
   public void testListDevices() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
       .appKey(WIA_APP_KEY)
@@ -240,6 +236,36 @@ public class WiaCloudTest {
   }
 
     @Test
+    public void testListUsers() throws Exception {
+        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                .appKey(WIA_APP_KEY)
+                .server(WIA_SERVER_URL)
+                .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+
+        Observable<WiaUserList> result = Wia.listUsers(WIA_SPACE_ID);
+        result.subscribeOn(Schedulers.io())
+                // NOTE: Add this for Android device testing
+                // .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    assertNotNull("Verify that response is NOT null", response);
+                    assertNotNull("Verify that response.users() is NOT null", response.users());
+                    assertNotNull("Verify that response.count() is NOT null", response.count());
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    }
+
+    @Test
     public void testCreateSpace() throws Exception {
         Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 
@@ -248,7 +274,7 @@ public class WiaCloudTest {
                 .server(WIA_SERVER_URL)
                 .build()
         );
-    
+
         Wia.accessToken(WIA_ACCESS_TOKEN);
 
         final Semaphore done = new Semaphore(0);
@@ -384,8 +410,6 @@ public class WiaCloudTest {
             assertNotNull("Verify that device.id() is NOT null", device.id());
             assertNotNull("Verify that device.name() is NOT null", device.name());
             assertNotNull("Verify that device.events() is NOT null", device.events());
-            System.out.println(device.toString());
-            System.out.println(device.events().toString());
             done.release();
           }, error -> {
             System.err.println(error.toString());
@@ -393,5 +417,32 @@ public class WiaCloudTest {
 
     assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
   }
+
+    @Test
+    public void testAddUserToSpace() throws Exception {
+        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                .appKey(WIA_APP_KEY)
+                .server(WIA_SERVER_URL)
+                .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+
+        Observable<WiaSpaceUserInvite> result = Wia.addUserToSpace(WIA_SPACE_ID, "test@wia.io");
+        result.subscribeOn(Schedulers.io())
+                .subscribe(response -> {
+                    assertNotNull("Verify that response is NOT null", response);
+                    assertNotNull("Verify that response.invited() is NOT null", response.invited());
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    }
 
 }

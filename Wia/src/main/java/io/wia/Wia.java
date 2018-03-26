@@ -8,27 +8,11 @@
 package io.wia;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.util.Log;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
 
 import okhttp3.OkHttpClient;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 
 public class Wia {
   private static final String TAG = "io.wia.Wia";
@@ -324,8 +308,20 @@ public class Wia {
     return WiaPlugins.get().accessToken();
   }
 
+  public static Observable<WiaUser> createUser(String fullName, String emailAddress, String password) {
+    WiaSignupRequest signupRequest = new WiaSignupRequest(
+            fullName, emailAddress, password
+    );
+
+    return WiaPlugins.get().wiaService().createUser(signupRequest);
+  }
+
   public static Observable<WiaUser> retrieveUser(String id) {
     return WiaPlugins.get().wiaService().retrieveUser(id);
+  }
+
+  public static Observable<WiaUserList> listUsers(String spaceId) {
+    return WiaPlugins.get().wiaService().listUsers(spaceId);
   }
 
   public static Observable<WiaSpace> retrieveSpace(String id) {
@@ -344,6 +340,18 @@ public class Wia {
     return WiaPlugins.get().wiaService().listSpaces();
   }
 
+  public static Observable<WiaSpaceUserInvite> addUserToSpace(String spaceId, String emailAddress) {
+    WiaSpaceUserInviteRequest inviteRequest = new WiaSpaceUserInviteRequest(
+            emailAddress
+    );
+
+    return WiaPlugins.get().wiaService().addUserToSpace(spaceId, inviteRequest);
+  }
+
+//  public static Observable<WiaUserRemove> removeUserFromSpace(String spaceId, String id) {
+//    return WiaPlugins.get().wiaService().removeUserFromSpace(spaceId, id);
+//  }
+
   public static Observable<WiaDevice> retrieveDevice(String id) {
     return WiaPlugins.get().wiaService().retrieveDevice(id);
   }
@@ -359,13 +367,4 @@ public class Wia {
 
     return WiaPlugins.get().wiaService().generateAccessToken(loginRequest);
   }
-
-  public static Observable<WiaUser> createUser(String fullName, String emailAddress, String password) {
-    WiaSignupRequest signupRequest = new WiaSignupRequest(
-      fullName, emailAddress, password
-    );
-
-    return WiaPlugins.get().wiaService().createUser(signupRequest);
-  }
-
 }

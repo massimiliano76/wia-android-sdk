@@ -1,22 +1,12 @@
 package io.wia;
 
-import java.util.Map;
-import java.util.List;
-
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 
-import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
-
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 public interface WiaService {
   // Users
@@ -28,6 +18,11 @@ public interface WiaService {
   @GET("users/{id}")
   Observable<WiaUser> retrieveUser(
     @Path("id") String id
+  );
+
+  @GET("users")
+  Observable<WiaUserList> listUsers(
+    @Query("space.id") String spaceId
   );
 
   // Spaces
@@ -44,6 +39,20 @@ public interface WiaService {
   @GET("spaces")
   Observable<WiaSpaceList> listSpaces();
 
+  // Space Users
+  @POST("spaces/{spaceId}/users")
+  Observable<WiaSpaceUserInvite> addUserToSpace(
+    @Path("spaceId") String spaceId,
+    @Body WiaSpaceUserInviteRequest spaceUserInviteRequest
+  );
+
+//  @DELETE("spaces/{spaceId}/users")
+//  Observable<WiaUserRemove> removeUserFromSpace(
+//    @Path("spaceId") String spaceId,
+//    @Body String id
+//  );
+
+  // Devices
   @GET("devices/{id}")
   Observable<WiaDevice> retrieveDevice(
     @Path("id") String id
@@ -54,6 +63,7 @@ public interface WiaService {
     @Query("space.id") String spaceId
   );
 
+  // Authentication
   @POST("auth/token")
   Observable<WiaAccessToken> generateAccessToken(
     @Body WiaLoginRequest loginRequest

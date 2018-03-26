@@ -15,12 +15,12 @@ Grab via Maven:
 <dependency>
   <groupId>io.wia</groupId>
   <artifactId>wia-android-sdk</artifactId>
-  <version>0.1.4</version>
+  <version>0.1.5</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'io.wia:wia-android-sdk:0.1.4'
+compile 'io.wia:wia-android-sdk:0.1.5'
 ```
 
 The SDK requires at minimum Java 6 or Android 2.3.
@@ -31,7 +31,7 @@ Usage
 This manages all your interaction with the Wia API.
 ```java
 Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-  .clientKey("YOUR_CLIENT_KEY")
+  .appKey("YOUR_APP_KEY")
   .build()
 );
 ```

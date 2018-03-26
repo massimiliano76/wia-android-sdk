@@ -44,8 +44,6 @@ cache:
     - $HOME/.m2/repository
 env:
   matrix:
-  - API=android-19 ABI=armeabi-v7a
-  - API=android-21 ABI=armeabi-v7a
   - API=android-22 ABI=armeabi-v7a
   global:
   - ADB_INSTALL_TIMEOUT=8

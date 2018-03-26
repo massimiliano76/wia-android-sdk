@@ -297,65 +297,65 @@ public class WiaCloudTest {
         assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
     }
 
-  @Test
-  public void testCreateAndLoginUser() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
-
-    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey(WIA_CLIENT_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
-    );
-
-    final Semaphore done = new Semaphore(0);
-    final String fullName = "Test User";
-    final String emailAddress = "team+" + String.valueOf(System.currentTimeMillis()) + "@wia.io";
-    final String password = String.valueOf(System.currentTimeMillis());
-
-    Observable<WiaUser> signupUserObservable = Wia.createUser(
-      fullName, emailAddress, password
-    );
-    signupUserObservable.subscribeOn(Schedulers.io())
-          // NOTE: Add this for Android device testing
-          // .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(createdUser -> {
-            assertNotNull("Verify that user is NOT null", createdUser);
-            assertNotNull("Verify that user.id() is NOT null", createdUser.id());
-            assertNotNull("Verify that user.fullName() is NOT null", createdUser.fullName());
-
-            Observable<WiaAccessToken> loginUserObservable = Wia.loginUser(
-              emailAddress, password
-            );
-            loginUserObservable.subscribeOn(Schedulers.io())
-                  // NOTE: Add this for Android device testing
-                  // .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(accessToken -> {
-                    assertNotNull("Verify that accessToken is NOT null", accessToken);
-                    assertNotNull("Verify that accessToken.token() is NOT null", accessToken.token());
-
-                    Wia.accessToken(accessToken.token());
-
-                    Observable<WiaUser> currentUserObservable = Wia.retrieveUser("me");
-                    currentUserObservable.subscribeOn(Schedulers.io())
-                          // NOTE: Add this for Android device testing
-                          // .observeOn(AndroidSchedulers.mainThread())
-                          .subscribe(retrievedUser -> {
-                            assertNotNull("Verify that retrievedUser is NOT null", retrievedUser);
-                            assertNotNull("Verify that retrievedUser.id() is NOT null", retrievedUser.id());
-                            assertEquals(retrievedUser.id(), createdUser.id());
-                            done.release();
-                          }, error -> {
-                            System.err.println(error.toString());
-                          });
-                  }, error -> {
-                    System.err.println(error.toString());
-                  });
-          }, error -> {
-            System.err.println(error.toString());
-          });
-
-    assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
-  }
+//  @Test
+//  public void testCreateAndLoginUser() throws Exception {
+//    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+//
+//    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+//      .clientKey(WIA_CLIENT_KEY)
+//      .server(WIA_SERVER_URL)
+//      .build()
+//    );
+//
+//    final Semaphore done = new Semaphore(0);
+//    final String fullName = "Test User";
+//    final String emailAddress = "team+" + String.valueOf(System.currentTimeMillis()) + "@wia.io";
+//    final String password = String.valueOf(System.currentTimeMillis());
+//
+//    Observable<WiaUser> signupUserObservable = Wia.createUser(
+//      fullName, emailAddress, password
+//    );
+//    signupUserObservable.subscribeOn(Schedulers.io())
+//          // NOTE: Add this for Android device testing
+//          // .observeOn(AndroidSchedulers.mainThread())
+//          .subscribe(createdUser -> {
+//            assertNotNull("Verify that user is NOT null", createdUser);
+//            assertNotNull("Verify that user.id() is NOT null", createdUser.id());
+//            assertNotNull("Verify that user.fullName() is NOT null", createdUser.fullName());
+//
+//            Observable<WiaAccessToken> loginUserObservable = Wia.loginUser(
+//              emailAddress, password
+//            );
+//            loginUserObservable.subscribeOn(Schedulers.io())
+//                  // NOTE: Add this for Android device testing
+//                  // .observeOn(AndroidSchedulers.mainThread())
+//                  .subscribe(accessToken -> {
+//                    assertNotNull("Verify that accessToken is NOT null", accessToken);
+//                    assertNotNull("Verify that accessToken.token() is NOT null", accessToken.token());
+//
+//                    Wia.accessToken(accessToken.token());
+//
+//                    Observable<WiaUser> currentUserObservable = Wia.retrieveUser("me");
+//                    currentUserObservable.subscribeOn(Schedulers.io())
+//                          // NOTE: Add this for Android device testing
+//                          // .observeOn(AndroidSchedulers.mainThread())
+//                          .subscribe(retrievedUser -> {
+//                            assertNotNull("Verify that retrievedUser is NOT null", retrievedUser);
+//                            assertNotNull("Verify that retrievedUser.id() is NOT null", retrievedUser.id());
+//                            assertEquals(retrievedUser.id(), createdUser.id());
+//                            done.release();
+//                          }, error -> {
+//                            System.err.println(error.toString());
+//                          });
+//                  }, error -> {
+//                    System.err.println(error.toString());
+//                  });
+//          }, error -> {
+//            System.err.println(error.toString());
+//          });
+//
+//    assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+//  }
 
   @Test
   public void testRetrieveDeviceWithLocation() throws Exception {

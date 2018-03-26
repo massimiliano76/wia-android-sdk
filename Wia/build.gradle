@@ -5,7 +5,7 @@ apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'io.wia'
-version = '0.1.4'
+version = '0.1.5'
 
 ext {
     bintrayRepo = 'maven'  // this is the same as whatever you called your repository in Bintray

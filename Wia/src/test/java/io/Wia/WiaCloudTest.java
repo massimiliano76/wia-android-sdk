@@ -203,37 +203,37 @@ public class WiaCloudTest {
     assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
   }
 
-  @Test
-  public void testCreateUser() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
-
-    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .clientKey(WIA_CLIENT_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
-    );
-
-    final Semaphore done = new Semaphore(0);
-    final String fullName = "Test User";
-    final String emailAddress = "team+" + String.valueOf(System.currentTimeMillis()) + "@wia.io";
-    final String password = String.valueOf(System.currentTimeMillis());
-
-    Observable<WiaUser> result = Wia.createUser(
-      fullName, emailAddress, password
-    );
-    result.subscribeOn(Schedulers.io())
-          // NOTE: Add this for Android device testing
-          // .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(user -> {
-            assertNotNull("Verify that user is NOT null", user);
-            assertNotNull("Verify that user.id() is NOT null", user.id());
-            done.release();
-          }, error -> {
-            System.err.println(error.toString());
-          });
-
-    assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
-  }
+//  @Test
+//  public void testCreateUser() throws Exception {
+//    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+//
+//    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+//      .clientKey(WIA_CLIENT_KEY)
+//      .server(WIA_SERVER_URL)
+//      .build()
+//    );
+//
+//    final Semaphore done = new Semaphore(0);
+//    final String fullName = "Test User";
+//    final String emailAddress = "team+" + String.valueOf(System.currentTimeMillis()) + "@wia.io";
+//    final String password = String.valueOf(System.currentTimeMillis());
+//
+//    Observable<WiaUser> result = Wia.createUser(
+//      fullName, emailAddress, password
+//    );
+//    result.subscribeOn(Schedulers.io())
+//          // NOTE: Add this for Android device testing
+//          // .observeOn(AndroidSchedulers.mainThread())
+//          .subscribe(user -> {
+//            assertNotNull("Verify that user is NOT null", user);
+//            assertNotNull("Verify that user.id() is NOT null", user.id());
+//            done.release();
+//          }, error -> {
+//            System.err.println(error.toString());
+//          });
+//
+//    assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+//  }
 
     @Test
     public void testListUsers() throws Exception {

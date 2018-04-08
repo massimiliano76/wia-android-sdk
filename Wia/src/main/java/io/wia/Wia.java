@@ -367,4 +367,8 @@ public class Wia {
 
     return WiaPlugins.get().wiaService().generateAccessToken(loginRequest);
   }
+
+  public static Observable<WiaId> registerNotificationDevice(String token) {
+    return WiaPlugins.get().wiaService().registerNotificationDevice(token, "android");
+  }
 }

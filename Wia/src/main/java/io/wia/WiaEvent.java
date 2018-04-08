@@ -29,6 +29,8 @@ public class WiaEvent extends WiaResource {
 
   JsonElement data;
 
+  JsonElement file;
+
   /// The timestamp milliseconds of this Event
   @SerializedName("timestamp")
   private long timestampMs;
@@ -52,6 +54,13 @@ public class WiaEvent extends WiaResource {
    */
   public JsonElement data() {
     return data;
+  }
+
+  /**
+   * @return file of this event.
+   */
+  public JsonElement file() {
+    return file;
   }
 
   /**

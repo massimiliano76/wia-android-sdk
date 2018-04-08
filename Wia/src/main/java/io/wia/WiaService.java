@@ -3,6 +3,8 @@ package io.wia;
 import io.reactivex.Observable;
 
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -67,5 +69,13 @@ public interface WiaService {
   @POST("auth/token")
   Observable<WiaAccessToken> generateAccessToken(
     @Body WiaLoginRequest loginRequest
+  );
+
+  // Notifications
+  @POST("notifications/register")
+  @FormUrlEncoded
+  Observable<WiaId> registerNotificationDevice(
+    @Field("token") String token,
+    @Field("type") String type
   );
 }

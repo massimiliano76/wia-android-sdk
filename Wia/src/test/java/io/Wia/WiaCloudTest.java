@@ -33,6 +33,8 @@ import io.reactivex.Observable;
 import java.util.concurrent.CountDownLatch;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.UUID;
+
 // For android.os.Looper
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = TestHelper.ROBOLECTRIC_SDK_VERSION)
@@ -445,4 +447,32 @@ public class WiaCloudTest {
         assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
     }
 
+    @Test
+    public void testRegisterNotificationDevice() throws Exception {
+        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                .appKey(WIA_APP_KEY)
+                .server(WIA_SERVER_URL)
+                .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+
+        String uuid = UUID.randomUUID().toString();
+
+        Observable<WiaId> result = Wia.registerNotificationDevice(uuid);
+        result.subscribeOn(Schedulers.io())
+                .subscribe(response -> {
+                    assertNotNull("Verify that response is NOT null", response);
+                    assertNotNull("Verify that response.id() is NOT null", response.id());
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    }
 }

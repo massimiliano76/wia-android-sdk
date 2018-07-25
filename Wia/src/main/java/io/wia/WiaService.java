@@ -11,20 +11,42 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface WiaService {
-  // Users
-  @POST("users")
-  Observable<WiaUser> createUser(
-    @Body WiaSignupRequest signupRequest
+  // Authentication
+  @POST("auth/token")
+  Observable<WiaAccessToken> generateAccessToken(
+    @Body WiaLoginRequest loginRequest
   );
 
-  @GET("users/{id}")
-  Observable<WiaUser> retrieveUser(
-    @Path("id") String id
+  // Devices
+  @GET("devices/{id}")
+  Observable<WiaDevice> retrieveDevice(
+          @Path("id") String id
   );
 
-  @GET("users")
-  Observable<WiaUserList> listUsers(
-    @Query("space.id") String spaceId
+  @GET("devices")
+  Observable<WiaDeviceList> listDevices(
+          @Query("space.id") String spaceId
+  );
+
+  // Events
+  @POST("events")
+  Observable<WiaEvent> createEvent(
+    @Body WiaCreateEventRequest createEventRequest
+  );
+
+  // Locations
+  @POST("locations")
+  Observable<WiaLocation> createLocation(
+    @Body WiaCreateLocationRequest createLocationRequest
+  );
+
+
+  // Notifications
+  @POST("notifications/register")
+  @FormUrlEncoded
+  Observable<WiaId> registerNotificationDevice(
+      @Field("token") String token,
+      @Field("type") String type
   );
 
   // Spaces
@@ -48,34 +70,19 @@ public interface WiaService {
     @Body WiaSpaceUserInviteRequest spaceUserInviteRequest
   );
 
-//  @DELETE("spaces/{spaceId}/users")
-//  Observable<WiaUserRemove> removeUserFromSpace(
-//    @Path("spaceId") String spaceId,
-//    @Body String id
-//  );
-
-  // Devices
-  @GET("devices/{id}")
-  Observable<WiaDevice> retrieveDevice(
-    @Path("id") String id
+  // Users
+  @POST("users")
+  Observable<WiaUser> createUser(
+          @Body WiaSignupRequest signupRequest
   );
 
-  @GET("devices")
-  Observable<WiaDeviceList> listDevices(
-    @Query("space.id") String spaceId
+  @GET("users/{id}")
+  Observable<WiaUser> retrieveUser(
+          @Path("id") String id
   );
 
-  // Authentication
-  @POST("auth/token")
-  Observable<WiaAccessToken> generateAccessToken(
-    @Body WiaLoginRequest loginRequest
-  );
-
-  // Notifications
-  @POST("notifications/register")
-  @FormUrlEncoded
-  Observable<WiaId> registerNotificationDevice(
-    @Field("token") String token,
-    @Field("type") String type
+  @GET("users")
+  Observable<WiaUserList> listUsers(
+          @Query("space.id") String spaceId
   );
 }

@@ -10,6 +10,8 @@ package io.wia;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.google.gson.JsonElement;
+
 import okhttp3.OkHttpClient;
 
 import io.reactivex.Observable;
@@ -371,4 +373,37 @@ public class Wia {
   public static Observable<WiaId> registerNotificationDevice(String token) {
     return WiaPlugins.get().wiaService().registerNotificationDevice(token, "android");
   }
+
+  public static Observable<WiaEvent> createEvent(String name) {
+    WiaCreateEventRequest createEventRequest = new WiaCreateEventRequest(
+            name
+    );
+
+    return WiaPlugins.get().wiaService().createEvent(createEventRequest);
+  }
+
+  public static Observable<WiaEvent> createEvent(String name, JsonElement data) {
+    WiaCreateEventRequest createEventRequest = new WiaCreateEventRequest(
+            name, data
+    );
+
+    return WiaPlugins.get().wiaService().createEvent(createEventRequest);
+  }
+
+  public static Observable<WiaLocation> createLocation(Double latitude, Double longitude) {
+    WiaCreateLocationRequest createLocationRequest = new WiaCreateLocationRequest(
+            latitude, longitude
+    );
+
+    return WiaPlugins.get().wiaService().createLocation(createLocationRequest);
+  }
+
+  public static Observable<WiaLocation> createLocation(Double latitude, Double longitude, Double altitude) {
+    WiaCreateLocationRequest createLocationRequest = new WiaCreateLocationRequest(
+            latitude, longitude, altitude
+    );
+
+    return WiaPlugins.get().wiaService().createLocation(createLocationRequest);
+  }
+
 }

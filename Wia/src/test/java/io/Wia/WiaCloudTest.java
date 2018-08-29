@@ -172,7 +172,7 @@ public class WiaCloudTest {
             System.err.println(error.toString());
           });
 
-    assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    assertTrue(done.tryAcquire(1, 15, TimeUnit.SECONDS));
   }
 
   @Test
@@ -204,7 +204,35 @@ public class WiaCloudTest {
 
     assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
   }
+    @Test
+    public void testListWidgets() throws Exception {
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                .appKey(WIA_APP_KEY)
+                .server(WIA_SERVER_URL)
+                .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+
+        Observable<WiaWidgetList> result = Wia.listWidgets(WIA_DEVICE_ID);
+        result.subscribeOn(Schedulers.io())
+                // NOTE: Add this for Android device testing
+                // .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    assertNotNull("Verify that response is NOT null", response);
+                    assertNotNull("Verify that response.widgets() is NOT null", response.widgets());
+                    assertNotNull("Verify that response.count() is NOT null", response.count());
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    }
 //  @Test
 //  public void testCreateUser() throws Exception {
 //    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);

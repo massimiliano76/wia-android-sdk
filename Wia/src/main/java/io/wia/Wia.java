@@ -361,6 +361,10 @@ public class Wia {
   public static Observable<WiaDeviceList> listDevices(String spaceId) {
     return WiaPlugins.get().wiaService().listDevices(spaceId);
   }
+
+  public static Observable<WiaWidgetList> listWidgets(String deviceId) {
+    return WiaPlugins.get().wiaService().listWidgets(deviceId);
+  }
   
   public static Observable<WiaAccessToken> loginUser(String username, String password) {
     WiaLoginRequest loginRequest = new WiaLoginRequest(

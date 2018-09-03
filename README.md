@@ -15,12 +15,12 @@ Grab via Maven:
 <dependency>
   <groupId>io.wia</groupId>
   <artifactId>wia-android-sdk</artifactId>
-  <version>0.3.2</version>
+  <version>0.3.3</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'io.wia:wia-android-sdk:0.3.2'
+compile 'io.wia:wia-android-sdk:0.3.3'
 ```
 
 The SDK requires at minimum Java 6 or Android 2.3.

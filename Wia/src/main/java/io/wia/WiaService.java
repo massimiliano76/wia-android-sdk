@@ -40,12 +40,28 @@ public interface WiaService {
     @Body WiaCreateEventRequest createEventRequest
   );
 
+  @GET("events/query")
+  Observable<WiaEventQuery> queryEvents(
+          @Query("device.id") String deviceId,
+          @Query("name") String name,
+          @Query("since") long since,
+          @Query("until") long until,
+          @Query("aggregateFunction") String aggregateFunction,
+          @Query("resolution") String resolution,
+          @Query("sort") String sort
+  );
+
   // Locations
   @POST("locations")
   Observable<WiaLocation> createLocation(
     @Body WiaCreateLocationRequest createLocationRequest
   );
 
+  // Commands
+  @POST("commands/run")
+  Observable<WiaRunCommandResponse> runCommand(
+    @Body WiaRunCommandRequest runCommandRequest
+  );
 
   // Notifications
   @POST("notifications/register")

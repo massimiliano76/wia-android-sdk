@@ -247,7 +247,7 @@ public class WiaCloudTest {
       Wia.accessToken(WIA_ACCESS_TOKEN);
 
       final Semaphore done = new Semaphore(0);
-      String name = "Test Widget";
+      String name = "UPQUETeE8YsyEEr2svQNxK875Vl1Vri8";
       long since = 1533304451362L;
       long until = 1535982851362L;
       String resolution = "day";
@@ -552,7 +552,7 @@ public class WiaCloudTest {
         Wia.accessToken(WIA_ACCESS_TOKEN);
 
         final Semaphore done = new Semaphore(0);
-        String slug = "test";
+        String slug = "mk9znxb9rftaysmcaillvzaj";
 
         Observable<WiaRunCommandResponse> result = Wia.runCommand(WIA_DEVICE_ID, slug);
         result.subscribeOn(Schedulers.io())

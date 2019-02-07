@@ -28,7 +28,14 @@ public interface WiaService {
           @Query("space.id") String spaceId
   );
 
-  @GET("devices/types")
+  @POST("devices")
+  Observable<WiaDevice> createDevice(
+          @Query("name") String name,
+          @Query("deviceTypeId") int deviceTypeId,
+          @Query("space.id") String spaceId
+  );
+
+  @GET("devices/types?order=manufacturer&sort=asc")
   Observable<WiaDeviceTypeList> listDeviceTypes();
 
   //Widgets

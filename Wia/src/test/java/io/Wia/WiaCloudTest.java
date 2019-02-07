@@ -206,6 +206,36 @@ public class WiaCloudTest {
   }
 
     @Test
+    public void testCreateDevice() throws Exception {
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                .appKey(WIA_APP_KEY)
+                .server(WIA_SERVER_URL)
+                .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+        final String name = "Test Device " + String.valueOf(System.currentTimeMillis());
+        final int deviceTypeId = 2001;
+
+        Observable<WiaDevice> result = Wia.createDevice(name, deviceTypeId, WIA_SPACE_ID);
+        result.subscribeOn(Schedulers.io())
+                // NOTE: Add this for Android device testing
+                // .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(device -> {
+                    assertNotNull("Verify that device is NOT null", device);
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    }
+
+    @Test
     public void testListDeviceTypes() throws Exception {
         Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 

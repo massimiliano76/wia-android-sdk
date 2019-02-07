@@ -362,6 +362,10 @@ public class Wia {
     return WiaPlugins.get().wiaService().listDevices(spaceId);
   }
 
+  public static Observable<WiaDeviceTypeList> listDeviceTypes() {
+    return WiaPlugins.get().wiaService().listDeviceTypes();
+  }
+
   public static Observable<WiaWidgetList> listWidgets(String deviceId) {
     return WiaPlugins.get().wiaService().listWidgets(deviceId);
   }

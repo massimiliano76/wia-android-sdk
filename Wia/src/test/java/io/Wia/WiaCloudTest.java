@@ -37,7 +37,7 @@ import java.util.UUID;
 
 // For android.os.Looper
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = TestHelper.ROBOLECTRIC_SDK_VERSION)
+@Config(constants = BuildConfig.class, sdk = io.wia.TestHelper.ROBOLECTRIC_SDK_VERSION)
 public class WiaCloudTest {
   private static final String TAG = "io.wia.WiaCloudTest";
 
@@ -82,7 +82,7 @@ public class WiaCloudTest {
 
   @Test
   public void testInitializeApplicationBuilder() throws Exception {
-      Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+      Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
       Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
         .appKey(WIA_APP_KEY)
@@ -92,7 +92,7 @@ public class WiaCloudTest {
 
   @Test
   public void testRetrieveCurrentUser() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
       .appKey(WIA_APP_KEY)
@@ -119,7 +119,7 @@ public class WiaCloudTest {
 
   @Test
   public void testListSpace() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
       .appKey(WIA_APP_KEY)
@@ -149,7 +149,7 @@ public class WiaCloudTest {
 
   @Test
   public void testRetrieveSpace() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
       .appKey(WIA_APP_KEY)
@@ -363,7 +363,7 @@ public class WiaCloudTest {
 
     @Test
     public void testListUsers() throws Exception {
-        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
                 .appKey(WIA_APP_KEY)
@@ -393,7 +393,7 @@ public class WiaCloudTest {
 
     @Test
     public void testCreateSpace() throws Exception {
-        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
                 .appKey(WIA_APP_KEY)
@@ -485,7 +485,7 @@ public class WiaCloudTest {
 
   @Test
   public void testRetrieveDeviceWithLocation() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
       .appKey(WIA_APP_KEY)
@@ -517,7 +517,7 @@ public class WiaCloudTest {
 
   @Test
   public void testRetrieveDeviceWithEvent() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
       .appKey(WIA_APP_KEY)
@@ -545,8 +545,35 @@ public class WiaCloudTest {
   }
 
     @Test
+    public void testGetDeviceApiKeys() throws Exception {
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                .appKey(WIA_APP_KEY)
+                .server(WIA_SERVER_URL)
+                .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+
+        Observable<WiaDeviceApiKeys> result = Wia.getDeviceApiKeys(WIA_DEVICE_ID);
+        result.subscribeOn(Schedulers.io())
+                .subscribe(apiKeys -> {
+                    assertNotNull("Verify that apiKeys is NOT null", apiKeys);
+                    assertNotNull("Verify that apiKeys.secretKey() is NOT null", apiKeys.secretKey());
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 15, TimeUnit.SECONDS));
+    }
+
+    @Test
     public void testAddUserToSpace() throws Exception {
-        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
                 .appKey(WIA_APP_KEY)
@@ -573,7 +600,7 @@ public class WiaCloudTest {
 
     @Test
     public void testRegisterNotificationDevice() throws Exception {
-        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
                 .appKey(WIA_APP_KEY)
@@ -602,7 +629,7 @@ public class WiaCloudTest {
 
     @Test
     public void testRunCommand() throws Exception {
-        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
                 .appKey(WIA_APP_KEY)

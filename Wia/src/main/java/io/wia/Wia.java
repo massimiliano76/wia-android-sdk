@@ -358,6 +358,10 @@ public class Wia {
     return WiaPlugins.get().wiaService().retrieveDevice(id);
   }
 
+  public static Observable<WiaDeviceApiKeys> getDeviceApiKeys(String id) {
+    return WiaPlugins.get().wiaService().getDeviceApiKeys(id);
+  }
+
   public static Observable<WiaDeviceList> listDevices(String spaceId) {
     return WiaPlugins.get().wiaService().listDevices(spaceId);
   }

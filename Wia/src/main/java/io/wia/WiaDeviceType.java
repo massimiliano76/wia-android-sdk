@@ -9,6 +9,8 @@ public class WiaDeviceType extends WiaResource {
 
     String model;
 
+    String slug;
+
     /**
      * @return id of this device type.
      */
@@ -31,6 +33,13 @@ public class WiaDeviceType extends WiaResource {
     }
 
     /**
+     * @return slug of this device type.
+     */
+    public String slug() {
+        return slug;
+    }
+
+    /**
      * Create a String from this object.
      * @return a String containing the id and name of this device type
      */
@@ -39,6 +48,7 @@ public class WiaDeviceType extends WiaResource {
                 + "id='" + id() + '\''
                 + ", manufacturer='" + manufacturer + '\''
                 + ", model='" + model + '\''
+                + ", slug='" + slug + '\''
                 + '}';
     }
 }

@@ -15,6 +15,8 @@ public class WiaDevice extends WiaResource {
 
   WiaLocation location;
 
+  WiaDeviceType deviceType;
+
   /**
    * @return id of this device.
    */
@@ -41,6 +43,13 @@ public class WiaDevice extends WiaResource {
    */
   public List<WiaEvent> events() {
     return events;
+  }
+
+  /**
+   * @return events of this device.
+   */
+  public WiaDeviceType deviceType() {
+    return deviceType;
   }
 
   /**

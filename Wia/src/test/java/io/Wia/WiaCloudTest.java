@@ -10,6 +10,7 @@ package io.wia;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -85,7 +86,7 @@ public class WiaCloudTest {
       Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
       Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-        .appKey(WIA_APP_KEY)
+//        .appKey(WIA_APP_KEY)
         .build()
       );
   }
@@ -95,9 +96,10 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+        .clientKey(WIA_CLIENT_KEY)
+//        .appKey(WIA_APP_KEY)
+        .server(WIA_SERVER_URL)
+        .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -122,9 +124,10 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+        .clientKey(WIA_CLIENT_KEY)
+//        .appKey(WIA_APP_KEY)
+        .server(WIA_SERVER_URL)
+        .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -152,9 +155,10 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+        .clientKey(WIA_CLIENT_KEY)
+//        .appKey(WIA_APP_KEY)
+        .server(WIA_SERVER_URL)
+        .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -180,9 +184,10 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+        .clientKey(WIA_CLIENT_KEY)
+//        .appKey(WIA_APP_KEY)
+        .server(WIA_SERVER_URL)
+        .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -210,7 +215,8 @@ public class WiaCloudTest {
         Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -240,7 +246,8 @@ public class WiaCloudTest {
         Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -270,7 +277,8 @@ public class WiaCloudTest {
       Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
       Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-              .appKey(WIA_APP_KEY)
+              .clientKey(WIA_CLIENT_KEY)
+//              .appKey(WIA_APP_KEY)
               .server(WIA_SERVER_URL)
               .build()
       );
@@ -300,7 +308,8 @@ public class WiaCloudTest {
       Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
       Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-              .appKey(WIA_APP_KEY)
+              .clientKey(WIA_CLIENT_KEY)
+//              .appKey(WIA_APP_KEY)
               .server(WIA_SERVER_URL)
               .build()
       );
@@ -335,8 +344,9 @@ public class WiaCloudTest {
 //
 //    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
 //      .clientKey(WIA_CLIENT_KEY)
-//      .server(WIA_SERVER_URL)
-//      .build()
+////        .appKey(WIA_APP_KEY)
+//        .server(WIA_SERVER_URL)
+//        .build()
 //    );
 //
 //    final Semaphore done = new Semaphore(0);
@@ -366,7 +376,8 @@ public class WiaCloudTest {
         Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -396,7 +407,8 @@ public class WiaCloudTest {
         Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -488,9 +500,10 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+            .clientKey(WIA_CLIENT_KEY)
+//            .appKey(WIA_APP_KEY)
+            .server(WIA_SERVER_URL)
+            .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -505,8 +518,6 @@ public class WiaCloudTest {
             assertNotNull("Verify that device.name() is NOT null", device.name());
             assertNotNull("Verify that device.location() is NOT null", device.location());
             assertNotNull("Verify that device.location().timestamp() is NOT null", device.location().timestamp());
-            System.out.println(device.toString());
-            System.out.println(device.location().toString());
             done.release();
           }, error -> {
             System.err.println(error.toString());
@@ -520,9 +531,10 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+            .clientKey(WIA_CLIENT_KEY)
+//            .appKey(WIA_APP_KEY)
+            .server(WIA_SERVER_URL)
+            .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -549,7 +561,8 @@ public class WiaCloudTest {
         Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -576,7 +589,8 @@ public class WiaCloudTest {
         Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -603,7 +617,8 @@ public class WiaCloudTest {
         Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -632,7 +647,8 @@ public class WiaCloudTest {
 //        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 //
 //        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-//                .appKey(WIA_APP_KEY)
+//                .clientKey(WIA_CLIENT_KEY)
+////                .appKey(WIA_APP_KEY)
 //                .server(WIA_SERVER_URL)
 //                .build()
 //        );

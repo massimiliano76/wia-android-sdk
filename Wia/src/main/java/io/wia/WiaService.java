@@ -28,16 +28,14 @@ public interface WiaService {
           @Query("space.id") String spaceId
   );
 
-  @GET("devices/${id}/apiKeys")
+  @GET("devices/{id}/apiKeys")
   Observable<WiaDeviceApiKeys> getDeviceApiKeys(
           @Path("id") String id
   );
 
   @POST("devices")
   Observable<WiaDevice> createDevice(
-          @Query("name") String name,
-          @Query("deviceTypeId") int deviceTypeId,
-          @Query("space.id") String spaceId
+          @Body WiaCreateDeviceRequest createDeviceRequest
   );
 
   @GET("devices/types?order=manufacturer&sort=asc")

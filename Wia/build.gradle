@@ -5,7 +5,7 @@ apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'io.wia'
-version = '0.4.0'
+version = '0.4.1'
 
 ext {
     bintrayRepo = 'maven'  // this is the same as whatever you called your repository in Bintray
@@ -24,7 +24,7 @@ ext {
     siteUrl = 'https://github.com/wiaio/wia-android-sdk'
     gitUrl = 'https://github.com/wiaio/wia-android-sdk.git'
 
-    libraryVersion = '0.4.0'
+    libraryVersion = '0.4.1'
 
     developerId = 'wia' // Maven plugin uses this. I don't know if it needs to be anything special.
     developerName = 'Conall Laverty'

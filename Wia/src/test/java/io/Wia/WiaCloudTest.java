@@ -10,6 +10,7 @@ package io.wia;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +38,7 @@ import java.util.UUID;
 
 // For android.os.Looper
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = TestHelper.ROBOLECTRIC_SDK_VERSION)
+@Config(constants = BuildConfig.class, sdk = io.wia.TestHelper.ROBOLECTRIC_SDK_VERSION)
 public class WiaCloudTest {
   private static final String TAG = "io.wia.WiaCloudTest";
 
@@ -82,22 +83,23 @@ public class WiaCloudTest {
 
   @Test
   public void testInitializeApplicationBuilder() throws Exception {
-      Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+      Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
       Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-        .appKey(WIA_APP_KEY)
+//        .appKey(WIA_APP_KEY)
         .build()
       );
   }
 
   @Test
   public void testRetrieveCurrentUser() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+        .clientKey(WIA_CLIENT_KEY)
+//        .appKey(WIA_APP_KEY)
+        .server(WIA_SERVER_URL)
+        .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -119,12 +121,13 @@ public class WiaCloudTest {
 
   @Test
   public void testListSpace() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+        .clientKey(WIA_CLIENT_KEY)
+//        .appKey(WIA_APP_KEY)
+        .server(WIA_SERVER_URL)
+        .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -149,12 +152,13 @@ public class WiaCloudTest {
 
   @Test
   public void testRetrieveSpace() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+        .clientKey(WIA_CLIENT_KEY)
+//        .appKey(WIA_APP_KEY)
+        .server(WIA_SERVER_URL)
+        .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -180,9 +184,10 @@ public class WiaCloudTest {
     Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+        .clientKey(WIA_CLIENT_KEY)
+//        .appKey(WIA_APP_KEY)
+        .server(WIA_SERVER_URL)
+        .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -204,12 +209,45 @@ public class WiaCloudTest {
 
     assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
   }
+
     @Test
-    public void testListWidgets() throws Exception {
+    public void testCreateDevice() throws Exception {
         Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
+                .server(WIA_SERVER_URL)
+                .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+        final String name = "Test Device " + String.valueOf(System.currentTimeMillis());
+        final int deviceTypeId = 2001;
+
+        Observable<WiaDevice> result = Wia.createDevice(name, deviceTypeId, WIA_SPACE_ID);
+        result.subscribeOn(Schedulers.io())
+                // NOTE: Add this for Android device testing
+                // .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(device -> {
+                    assertNotNull("Verify that device is NOT null", device);
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testListDeviceTypes() throws Exception {
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -218,13 +256,13 @@ public class WiaCloudTest {
 
         final Semaphore done = new Semaphore(0);
 
-        Observable<WiaWidgetList> result = Wia.listWidgets(WIA_DEVICE_ID);
+        Observable<WiaDeviceTypeList> result = Wia.listDeviceTypes();
         result.subscribeOn(Schedulers.io())
                 // NOTE: Add this for Android device testing
                 // .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     assertNotNull("Verify that response is NOT null", response);
-                    assertNotNull("Verify that response.widgets() is NOT null", response.widgets());
+                    assertNotNull("Verify that response.devices() is NOT null", response.deviceTypes());
                     assertNotNull("Verify that response.count() is NOT null", response.count());
                     done.release();
                 }, error -> {
@@ -233,14 +271,82 @@ public class WiaCloudTest {
 
         assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
     }
+
+  @Test
+  public void testListWidgets() throws Exception {
+      Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
+
+      Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+              .clientKey(WIA_CLIENT_KEY)
+//              .appKey(WIA_APP_KEY)
+              .server(WIA_SERVER_URL)
+              .build()
+      );
+
+      Wia.accessToken(WIA_ACCESS_TOKEN);
+
+      final Semaphore done = new Semaphore(0);
+
+      Observable<WiaWidgetList> result = Wia.listWidgets(WIA_DEVICE_ID);
+      result.subscribeOn(Schedulers.io())
+              // NOTE: Add this for Android device testing
+              // .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(response -> {
+                  assertNotNull("Verify that response is NOT null", response);
+                  assertNotNull("Verify that response.widgets() is NOT null", response.widgets());
+                  assertNotNull("Verify that response.count() is NOT null", response.count());
+                  done.release();
+              }, error -> {
+                  System.err.println(error.toString());
+              });
+
+      assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+  }
+
+  @Test
+  public void testQueryEvents() throws Exception {
+      Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
+
+      Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+              .clientKey(WIA_CLIENT_KEY)
+//              .appKey(WIA_APP_KEY)
+              .server(WIA_SERVER_URL)
+              .build()
+      );
+
+      Wia.accessToken(WIA_ACCESS_TOKEN);
+
+      final Semaphore done = new Semaphore(0);
+      String name = "UPQUETeE8YsyEEr2svQNxK875Vl1Vri8";
+      long since = 1533304451362L;
+      long until = 1535982851362L;
+      String resolution = "day";
+      String aggregateFunction = "avg";
+      String sort = "asc";
+
+      Observable<WiaEventQuery> result = Wia.queryEvents(WIA_DEVICE_ID, name, since, until, aggregateFunction, resolution, sort);
+      result.subscribeOn(Schedulers.io())
+              // NOTE: Add this for Android device testing
+              // .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(response -> {
+                  assertNotNull("Verify that response is NOT null", response);
+                  assertNotNull("Verify that response.result() is NOT null", response.result());
+                  done.release();
+              }, error -> {
+                  System.err.println(error.toString());
+              });
+
+      assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+  }
 //  @Test
 //  public void testCreateUser() throws Exception {
 //    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
 //
 //    Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
 //      .clientKey(WIA_CLIENT_KEY)
-//      .server(WIA_SERVER_URL)
-//      .build()
+////        .appKey(WIA_APP_KEY)
+//        .server(WIA_SERVER_URL)
+//        .build()
 //    );
 //
 //    final Semaphore done = new Semaphore(0);
@@ -267,10 +373,11 @@ public class WiaCloudTest {
 
     @Test
     public void testListUsers() throws Exception {
-        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -297,10 +404,11 @@ public class WiaCloudTest {
 
     @Test
     public void testCreateSpace() throws Exception {
-        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -389,12 +497,13 @@ public class WiaCloudTest {
 
   @Test
   public void testRetrieveDeviceWithLocation() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+            .clientKey(WIA_CLIENT_KEY)
+//            .appKey(WIA_APP_KEY)
+            .server(WIA_SERVER_URL)
+            .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -409,8 +518,6 @@ public class WiaCloudTest {
             assertNotNull("Verify that device.name() is NOT null", device.name());
             assertNotNull("Verify that device.location() is NOT null", device.location());
             assertNotNull("Verify that device.location().timestamp() is NOT null", device.location().timestamp());
-            System.out.println(device.toString());
-            System.out.println(device.location().toString());
             done.release();
           }, error -> {
             System.err.println(error.toString());
@@ -421,12 +528,13 @@ public class WiaCloudTest {
 
   @Test
   public void testRetrieveDeviceWithEvent() throws Exception {
-    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
     Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-      .appKey(WIA_APP_KEY)
-      .server(WIA_SERVER_URL)
-      .build()
+            .clientKey(WIA_CLIENT_KEY)
+//            .appKey(WIA_APP_KEY)
+            .server(WIA_SERVER_URL)
+            .build()
     );
 
     Wia.accessToken(WIA_ACCESS_TOKEN);
@@ -449,11 +557,40 @@ public class WiaCloudTest {
   }
 
     @Test
-    public void testAddUserToSpace() throws Exception {
-        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+    public void testGetDeviceApiKeys() throws Exception {
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
+                .server(WIA_SERVER_URL)
+                .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+
+        Observable<WiaDeviceApiKeys> result = Wia.getDeviceApiKeys(WIA_DEVICE_ID);
+        result.subscribeOn(Schedulers.io())
+                .subscribe(apiKeys -> {
+                    assertNotNull("Verify that apiKeys is NOT null", apiKeys);
+                    assertNotNull("Verify that apiKeys.secretKey() is NOT null", apiKeys.secretKey());
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 15, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testAddUserToSpace() throws Exception {
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -477,10 +614,11 @@ public class WiaCloudTest {
 
     @Test
     public void testRegisterNotificationDevice() throws Exception {
-        Activity activity = Robolectric.setupActivity(WiaTestActivity.class);
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
-                .appKey(WIA_APP_KEY)
+                .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
                 .server(WIA_SERVER_URL)
                 .build()
         );
@@ -503,4 +641,34 @@ public class WiaCloudTest {
 
         assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
     }
+
+//    @Test
+//    public void testRunCommand() throws Exception {
+//        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
+//
+//        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+//                .clientKey(WIA_CLIENT_KEY)
+////                .appKey(WIA_APP_KEY)
+//                .server(WIA_SERVER_URL)
+//                .build()
+//        );
+//
+//        Wia.accessToken(WIA_ACCESS_TOKEN);
+//
+//        final Semaphore done = new Semaphore(0);
+//        String slug = "mk9znxb9rftaysmcaillvzaj";
+//
+//        Observable<WiaRunCommandResponse> result = Wia.runCommand(WIA_DEVICE_ID, slug);
+//        result.subscribeOn(Schedulers.io())
+//                // NOTE: Add this for Android device testing
+//                // .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(response -> {
+//                    assertNotNull("Verify that response is NOT null", response);
+//                    done.release();
+//                }, error -> {
+//                    System.err.println(error.toString());
+//                });
+//
+//        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+//    }
 }

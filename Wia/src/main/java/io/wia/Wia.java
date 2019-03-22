@@ -358,8 +358,21 @@ public class Wia {
     return WiaPlugins.get().wiaService().retrieveDevice(id);
   }
 
+  public static Observable<WiaDeviceApiKeys> getDeviceApiKeys(String id) {
+    return WiaPlugins.get().wiaService().getDeviceApiKeys(id);
+  }
+
   public static Observable<WiaDeviceList> listDevices(String spaceId) {
     return WiaPlugins.get().wiaService().listDevices(spaceId);
+  }
+
+  public static Observable<WiaDevice> createDevice(String name, int deviceTypeId, String spaceId) {
+    WiaCreateDeviceRequest createDeviceRequest = new WiaCreateDeviceRequest(name, deviceTypeId, spaceId);
+    return WiaPlugins.get().wiaService().createDevice(createDeviceRequest);
+  }
+
+  public static Observable<WiaDeviceTypeList> listDeviceTypes() {
+    return WiaPlugins.get().wiaService().listDeviceTypes();
   }
 
   public static Observable<WiaWidgetList> listWidgets(String deviceId) {
@@ -394,6 +407,18 @@ public class Wia {
     return WiaPlugins.get().wiaService().createEvent(createEventRequest);
   }
 
+  public static Observable<WiaEventQuery> queryEvents(
+    String deviceId, 
+    String name, 
+    long since, 
+    long until, 
+    String aggregateFunction, 
+    String resolution, 
+    String sort
+  ) {
+    return WiaPlugins.get().wiaService().queryEvents(deviceId, name, since, until, aggregateFunction, resolution, sort);
+  }
+
   public static Observable<WiaLocation> createLocation(Double latitude, Double longitude) {
     WiaCreateLocationRequest createLocationRequest = new WiaCreateLocationRequest(
             latitude, longitude
@@ -408,6 +433,11 @@ public class Wia {
     );
 
     return WiaPlugins.get().wiaService().createLocation(createLocationRequest);
+  }
+
+  public static Observable<WiaRunCommandResponse> runCommand(String deviceId, String slug) {
+    WiaRunCommandRequest runCommandRequest = new WiaRunCommandRequest(deviceId, slug);
+    return WiaPlugins.get().wiaService().runCommand(runCommandRequest);
   }
 
 }

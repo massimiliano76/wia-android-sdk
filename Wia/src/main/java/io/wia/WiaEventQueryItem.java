@@ -7,50 +7,50 @@ import java.util.List;
  */
 public class WiaEventQueryItem extends WiaResource {
 
-  long avg;
+  double avg;
 
-  long count;
+  int count;
 
-  long max;
+  double max;
 
-  long min;
+  double min;
 
-  long sum;
+  double sum;
 
   String created_at;
 
   /**
    * @return avg of this event query item.
    */
-  public long avg() {
+  public double avg() {
     return avg;
   }
 
   /**
    * @return count of this event query item.
    */
-  public long count() {
+  public int count() {
     return count;
   }
 
   /**
    * @return max of this event query item.
    */
-  public long max() {
+  public double max() {
     return max;
   }
 
   /**
    * @return min of this event query item.
    */
-  public long min() {
+  public double min() {
     return min;
   }
 
   /**
    * @return sum of this event query item.
    */
-  public long sum() {
+  public double sum() {
     return sum;
   }
 

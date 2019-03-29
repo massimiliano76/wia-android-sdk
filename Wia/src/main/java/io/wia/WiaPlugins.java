@@ -134,7 +134,7 @@ class WiaPlugins {
 
       OkHttpClient client = new OkHttpClient.Builder()
               .certificatePinner(new CertificatePinner.Builder()
-                  .add("api.wia.io", "sha256/6kG+VHn9dIc8+v50sfqhcO09fVJ2Ire4UGDArprpj1k=")
+                  .add("api.wia.io", "sha256/wqBBWTQAQnDiMs/bfMJfmhhKCITNK9/b23jBrp2SYXo=")
                   .add("local.wia.io", "sha256/6kG+VHn9dIc8+v50sfqhcO09fVJ2Ire4UGDArprpj1k=")
                   .build())
               .connectionSpecs(Collections.singletonList(spec))

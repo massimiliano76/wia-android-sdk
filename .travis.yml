@@ -13,15 +13,25 @@ android:
   components:
     - tools
     - platform-tools
-    - doc-27
+
+    # The BuildTools version used by your project
+    - build-tools-27.0.0
+
+    # The SDK version used to compile your project
+    - android-27
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
     - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-19
-    - sys-img-armeabi-v7a-android-21
-    - sys-img-armeabi-v7a-android-22
+
+    # Specify at least one system image,
+    # if you need to run emulator(s) during your tests
+    - sys-img-x86-android-27
+    - sys-img-armeabi-v7a-android-17
 
 before_install:
-    - yes | sdkmanager "platforms;android-27"
-    - yes | sdkmanager "build-tools;27.0.0"
+#    - yes | sdkmanager "platforms;android-27"
     - pip install --user codecov
 
 script:

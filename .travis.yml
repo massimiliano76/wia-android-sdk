@@ -15,16 +15,9 @@ android:
     - platform-tools
     - build-tools-27.0.0
     - doc-27
-    - android-19
-    - android-21
-    - android-22
-    - android-23
-    - android-26
     - android-27
     - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-19
-    - sys-img-armeabi-v7a-android-21
-    - sys-img-armeabi-v7a-android-22
+    - sys-img-armeabi-v7a-android-27
 
 before_install:
     - yes | sdkmanager "platforms;android-27"
@@ -44,8 +37,7 @@ cache:
     - $HOME/.m2/repository
 env:
   matrix:
-  - API=android-19 ABI=armeabi-v7a
-  - API=android-22 ABI=armeabi-v7a
+  - API=android-27 ABI=armeabi-v7a
   global:
   - ADB_INSTALL_TIMEOUT=8
 
@@ -57,4 +49,4 @@ deploy:
     branch: master
     tags: true
     repo: wiaio/wia-android-sdk
-    condition: "$API = android-19"
+    condition: "$API = android-27"

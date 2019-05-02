@@ -13,6 +13,8 @@ public class WiaSpace extends WiaResource {
 
   WiaSpaceOwner owner;
 
+  WiaSpaceAvatar avatar;
+
   /**
    * @return id of this space.
    */
@@ -32,6 +34,13 @@ public class WiaSpace extends WiaResource {
    */
   public WiaSpaceOwner owner() {
     return owner;
+  }
+
+  /**
+   * @return avatar of this space.
+   */
+  public WiaSpaceAvatar avatar() {
+    return avatar;
   }
 
   /**

@@ -20,6 +20,9 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +36,13 @@ import static org.junit.Assert.assertTrue;
 import io.reactivex.Observable;
 import java.util.concurrent.CountDownLatch;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.UUID;
 
@@ -431,6 +441,42 @@ public class WiaCloudTest {
                 }, error -> {
                     System.err.println(error.toString());
                 });
+
+        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testUpdateAvatar() throws Exception {
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                        .clientKey(WIA_CLIENT_KEY)
+//                .appKey(WIA_APP_KEY)
+                        .server(WIA_SERVER_URL)
+                        .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+
+        File localImage = new File("./src/test/java/io/Wia/test.png");
+
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/png"), localImage);
+
+        MultipartBody.Part file = MultipartBody.Part.createFormData("file", localImage.getName(), requestFile);
+
+        String id = WIA_SPACE_ID;
+
+        retrofit2.Call<ResponseBody> call = Wia.updateAvatar(file, id);
+        try {
+            Response response = call.execute();
+//            System.out.println(response.toString());
+            assertNotNull("Verify that response is NOT null", response);
+            done.release();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
     }

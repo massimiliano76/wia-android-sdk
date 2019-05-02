@@ -12,9 +12,15 @@ import android.os.Bundle;
 
 import com.google.gson.JsonElement;
 
+import java.io.File;
+
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 public class Wia {
   private static final String TAG = "io.wia.Wia";
@@ -438,6 +444,10 @@ public class Wia {
   public static Observable<WiaRunCommandResponse> runCommand(String deviceId, String slug) {
     WiaRunCommandRequest runCommandRequest = new WiaRunCommandRequest(deviceId, slug);
     return WiaPlugins.get().wiaService().runCommand(runCommandRequest);
+  }
+
+  public static Call<ResponseBody> updateAvatar(MultipartBody.Part file, String id) {
+    return WiaPlugins.get().wiaService().updateAvatar(file, id);
   }
 
 }

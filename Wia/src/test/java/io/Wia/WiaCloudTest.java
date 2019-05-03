@@ -348,6 +348,41 @@ public class WiaCloudTest {
 
       assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
   }
+
+    @Test
+    public void testGetEventsByTimePeriod() throws Exception {
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                        .clientKey(WIA_CLIENT_KEY)
+//              .appKey(WIA_APP_KEY)
+                        .server(WIA_SERVER_URL)
+                        .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+        String name = "UPQUETeE8YsyEEr2svQNxK875Vl1Vri8";
+        long since = 1533304451362L;
+        long until = 1535982851362L;
+        String resolution = "day";
+
+        Observable<WiaEventList> result = Wia.getEventsByTimePeriod(WIA_DEVICE_ID, name, since, until, resolution);
+        result.subscribeOn(Schedulers.io())
+                // NOTE: Add this for Android device testing
+                // .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    assertNotNull("Verify that response is NOT null", response);
+                    assertNotNull("Verify that response.result() is NOT null", response.events());
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    }
+
 //  @Test
 //  public void testCreateUser() throws Exception {
 //    Activity activity = Robolectric.setupActivity(WiaTestActivity.class);

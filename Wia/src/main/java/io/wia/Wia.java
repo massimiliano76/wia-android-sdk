@@ -425,6 +425,16 @@ public class Wia {
     return WiaPlugins.get().wiaService().queryEvents(deviceId, name, since, until, aggregateFunction, resolution, sort);
   }
 
+    public static Observable<WiaEventList> getEventsByTimePeriod(
+        String deviceId,
+        String name,
+        long since,
+        long until,
+        String resolution
+    ) {
+        return WiaPlugins.get().wiaService().getEventsByTimePeriod(deviceId, name, since, until, resolution);
+    }
+
   public static Observable<WiaLocation> createLocation(Double latitude, Double longitude) {
     WiaCreateLocationRequest createLocationRequest = new WiaCreateLocationRequest(
             latitude, longitude

@@ -46,7 +46,7 @@ public class WiaDevice extends WiaResource {
   }
 
   /**
-   * @return events of this device.
+   * @return device type of this device.
    */
   public WiaDeviceType deviceType() {
     return type;

@@ -32,7 +32,7 @@ public class WiaEvent extends WiaResource {
   JsonElement file;
 
   /// The timestamp milliseconds of this Event
-  @SerializedName("timestamp")
+//  @SerializedName("timestamp")
   private long timestampMs;
 
   /**

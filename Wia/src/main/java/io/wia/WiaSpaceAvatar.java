@@ -2,14 +2,14 @@ package io.wia;
 
 public class WiaSpaceAvatar extends WiaResource {
   String thumbnail;
-  String image;
+  String url;
 
   public String thumbnail() {
     return thumbnail;
   }
 
-  public String image() {
-    return image;
+  public String url() {
+    return url;
   }
 
 }

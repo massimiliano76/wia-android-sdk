@@ -21,6 +21,7 @@ import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Query;
 
 public class Wia {
   private static final String TAG = "io.wia.Wia";
@@ -425,14 +426,15 @@ public class Wia {
     return WiaPlugins.get().wiaService().queryEvents(deviceId, name, since, until, aggregateFunction, resolution, sort);
   }
 
-    public static Observable<WiaEventList> getEventsByTimePeriod(
-        String deviceId,
-        String name,
-        long since,
-        long until,
-        String resolution
+    public static Observable<WiaEventList> getEvents(
+       String deviceId,
+       int limit,
+       int page,
+       long since,
+       long until,
+       String name
     ) {
-        return WiaPlugins.get().wiaService().getEventsByTimePeriod(deviceId, name, since, until, resolution);
+        return WiaPlugins.get().wiaService().getEvents(deviceId, limit, page, since, until, name);
     }
 
   public static Observable<WiaLocation> createLocation(Double latitude, Double longitude) {

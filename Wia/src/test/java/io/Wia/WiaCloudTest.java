@@ -350,7 +350,7 @@ public class WiaCloudTest {
   }
 
     @Test
-    public void testGetEventsByTimePeriod() throws Exception {
+    public void testGetEvents() throws Exception {
         Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
 
         Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
@@ -365,14 +365,16 @@ public class WiaCloudTest {
         final Semaphore done = new Semaphore(0);
         String name = "UPQUETeE8YsyEEr2svQNxK875Vl1Vri8";
         long since = 1533304451362L;
-        long until = 1535982851362L;
-        String resolution = "day";
+        long until = 1735982851362L;
+        int limit = 1;
+        int page = 1;
 
-        Observable<WiaEventList> result = Wia.getEventsByTimePeriod(WIA_DEVICE_ID, name, since, until, resolution);
+        Observable<WiaEventList> result = Wia.getEvents(WIA_DEVICE_ID, limit, page, since, until, name);
         result.subscribeOn(Schedulers.io())
                 // NOTE: Add this for Android device testing
                 // .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    System.out.println(response.events().toString());
                     assertNotNull("Verify that response is NOT null", response);
                     assertNotNull("Verify that response.result() is NOT null", response.events());
                     done.release();

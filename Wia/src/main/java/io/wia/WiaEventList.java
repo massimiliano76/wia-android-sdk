@@ -3,14 +3,14 @@ package io.wia;
 import java.util.List;
 
 public class WiaEventList {
-    private List<WiaEvent> events;
+    private List<WiaEvent1> events;
     private Integer count;
 
-    public List<WiaEvent> events() {
+    public List<WiaEvent1> events() {
         return events;
     }
 
-    public void events(List<WiaEvent> events) {
+    public void events(List<WiaEvent1> events) {
         this.events = events;
     }
 

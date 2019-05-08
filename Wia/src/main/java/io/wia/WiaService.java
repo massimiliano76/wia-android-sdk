@@ -74,12 +74,13 @@ public interface WiaService {
   );
 
   @GET("events")
-  Observable<WiaEventList> getEventsByTimePeriod(
+  Observable<WiaEventList> getEvents(
     @Query("device.id") String deviceId,
-    @Query("name") String name,
+    @Query("limit") int limit,
+    @Query("page") int page,
     @Query("since") long since,
     @Query("until") long until,
-    @Query("resolution") String resolution
+    @Query("name") String name
   );
 
   // Locations

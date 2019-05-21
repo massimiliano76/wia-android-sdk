@@ -34,6 +34,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 import javax.net.ssl.HostnameVerifier;
 import java.security.cert.X509Certificate;
+import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -139,6 +140,9 @@ class WiaPlugins {
                   .build())
               .connectionSpecs(Collections.singletonList(spec))
               .addInterceptor(new WiaHttpInterceptor())
+              .connectTimeout(25, TimeUnit.SECONDS)
+              .readTimeout(25, TimeUnit.SECONDS)
+              .writeTimeout(25, TimeUnit.SECONDS)
               .build();
 
       Retrofit retrofit = new Retrofit.Builder()

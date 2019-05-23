@@ -140,9 +140,9 @@ class WiaPlugins {
                   .build())
               .connectionSpecs(Collections.singletonList(spec))
               .addInterceptor(new WiaHttpInterceptor())
-              .connectTimeout(25, TimeUnit.SECONDS)
-              .readTimeout(25, TimeUnit.SECONDS)
-              .writeTimeout(25, TimeUnit.SECONDS)
+              .connectTimeout(60, TimeUnit.SECONDS)
+              .readTimeout(60, TimeUnit.SECONDS)
+              .writeTimeout(60, TimeUnit.SECONDS)
               .build();
 
       Retrofit retrofit = new Retrofit.Builder()

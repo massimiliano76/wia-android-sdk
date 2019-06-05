@@ -373,8 +373,8 @@ public class Wia {
     return WiaPlugins.get().wiaService().listDevices(spaceId);
   }
 
-  public static Observable<WiaDevice> createDevice(String name, int deviceTypeId, String spaceId) {
-    WiaCreateDeviceRequest createDeviceRequest = new WiaCreateDeviceRequest(name, deviceTypeId, spaceId);
+  public static Observable<WiaDevice> createDevice(String name, int deviceTypeId, String spaceId, String serialNumber) {
+    WiaCreateDeviceRequest createDeviceRequest = new WiaCreateDeviceRequest(name, deviceTypeId, spaceId, serialNumber);
     return WiaPlugins.get().wiaService().createDevice(createDeviceRequest);
   }
 

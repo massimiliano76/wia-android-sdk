@@ -237,7 +237,7 @@ public class WiaCloudTest {
         final String name = "Test Device " + String.valueOf(System.currentTimeMillis());
         final int deviceTypeId = 2001;
 
-        Observable<WiaDevice> result = Wia.createDevice(name, deviceTypeId, WIA_SPACE_ID);
+        Observable<WiaDevice> result = Wia.createDevice(name, deviceTypeId, WIA_SPACE_ID, "abc123");
         result.subscribeOn(Schedulers.io())
                 // NOTE: Add this for Android device testing
                 // .observeOn(AndroidSchedulers.mainThread())

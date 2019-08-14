@@ -59,6 +59,7 @@ public class WiaCloudTest {
   private String WIA_CLIENT_KEY = null;
   private String WIA_SPACE_ID = null;
   private String WIA_DEVICE_ID = null;
+  private String WIA_PRODUCT_ID = null;
 
   /**
    * Countdown latch
@@ -78,6 +79,7 @@ public class WiaCloudTest {
     WIA_CLIENT_KEY = System.getenv("WIA_CLIENT_KEY");
     WIA_SPACE_ID = System.getenv("WIA_SPACE_ID");
     WIA_DEVICE_ID = System.getenv("WIA_DEVICE_ID");
+    WIA_PRODUCT_ID = System.getenv("WIA_PRODUCT_ID");
   }
 
   @Test
@@ -312,6 +314,37 @@ public class WiaCloudTest {
 
       assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
   }
+
+    @Test
+    public void testListWidgetsForProduct() throws Exception {
+        Activity activity = Robolectric.setupActivity(io.wia.WiaTestActivity.class);
+
+        Wia.initialize(new Wia.Configuration.Builder(activity.getApplicationContext())
+                        .clientKey(WIA_CLIENT_KEY)
+//              .appKey(WIA_APP_KEY)
+                        .server(WIA_SERVER_URL)
+                        .build()
+        );
+
+        Wia.accessToken(WIA_ACCESS_TOKEN);
+
+        final Semaphore done = new Semaphore(0);
+
+        Observable<WiaWidgetList> result = Wia.listWidgetsForProduct(WIA_PRODUCT_ID);
+        result.subscribeOn(Schedulers.io())
+                // NOTE: Add this for Android device testing
+                // .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    assertNotNull("Verify that response is NOT null", response);
+                    assertNotNull("Verify that response.widgets() is NOT null", response.widgets());
+                    assertNotNull("Verify that response.count() is NOT null", response.count());
+                    done.release();
+                }, error -> {
+                    System.err.println(error.toString());
+                });
+
+        assertTrue(done.tryAcquire(1, 10, TimeUnit.SECONDS));
+    }
 
   @Test
   public void testQueryEvents() throws Exception {

@@ -56,6 +56,12 @@ public interface WiaService {
           @Query("device.id") String deviceId
   );
 
+  //Widgets for Product
+  @GET("widgets")
+  Observable<WiaWidgetList> listWidgetsForProduct(
+          @Query("product.id") String productId
+  );
+
   // Events
   @POST("events")
   Observable<WiaEvent> createEvent(

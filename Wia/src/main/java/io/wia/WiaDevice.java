@@ -17,6 +17,12 @@ public class WiaDevice extends WiaResource {
 
   WiaDeviceType type;
 
+  WiaProduct product;
+
+  String serialNumber;
+
+  Object state;
+
   /**
    * @return id of this device.
    */
@@ -50,6 +56,27 @@ public class WiaDevice extends WiaResource {
    */
   public WiaDeviceType deviceType() {
     return type;
+  }
+
+  /**
+   * @return serial number of this device.
+   */
+  public String serialNumber() {
+    return serialNumber;
+  }
+
+  /**
+   * @return product of this device.
+   */
+  public WiaProduct product() {
+    return product;
+  }
+
+  /**
+   * @return state of this device.
+   */
+  public Object state() {
+    return state;
   }
 
   /**

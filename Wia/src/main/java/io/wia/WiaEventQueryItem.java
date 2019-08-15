@@ -17,7 +17,16 @@ public class WiaEventQueryItem extends WiaResource {
 
   double sum;
 
+  double value;
+
   String created_at;
+
+  /**
+   * @return value of this event query item.
+   */
+  public double value() {
+    return value;
+  }
 
   /**
    * @return avg of this event query item.

@@ -1,5 +1,7 @@
 package io.wia;
 
+import com.google.gson.JsonElement;
+
 import java.util.List;
 
 /**
@@ -16,6 +18,12 @@ public class WiaDevice extends WiaResource {
   WiaLocation location;
 
   WiaDeviceType type;
+
+  WiaProduct product;
+
+  String serialNumber;
+
+  JsonElement state;
 
   /**
    * @return id of this device.
@@ -50,6 +58,27 @@ public class WiaDevice extends WiaResource {
    */
   public WiaDeviceType deviceType() {
     return type;
+  }
+
+  /**
+   * @return serial number of this device.
+   */
+  public String serialNumber() {
+    return serialNumber;
+  }
+
+  /**
+   * @return product of this device.
+   */
+  public WiaProduct product() {
+    return product;
+  }
+
+  /**
+   * @return state of this device.
+   */
+  public JsonElement state() {
+    return state;
   }
 
   /**

@@ -1,5 +1,7 @@
 package io.wia;
 
+import com.google.gson.JsonElement;
+
 import java.util.List;
 
 /**
@@ -21,7 +23,7 @@ public class WiaDevice extends WiaResource {
 
   String serialNumber;
 
-  Object state;
+  JsonElement state;
 
   /**
    * @return id of this device.
@@ -75,7 +77,7 @@ public class WiaDevice extends WiaResource {
   /**
    * @return state of this device.
    */
-  public Object state() {
+  public JsonElement state() {
     return state;
   }
 
